@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="pl" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sójka, orzechówka i CLAUDE.md</title>
+<meta name="description" content="Rodzaje pamięci ludzi i zwierząt jako projekt pamięci wielosesyjnej Claude Code, opowiedziane głosem Bajarza, z sześcioma pomysłami agenta o świeżym oku.">
+<style>
+/* Styl „dyplomatyczny” („Depesza”) — tokeny i reguły z ~/Code/style/dyplomatyczny/przyklady/raport.html, kroje zapasowe (CSP panelu blokuje fonty).
+   Komponenty traktatu dopisane na tych samych tokenach; żaden kolor poza tokenami nie stoi bez var() z wartością jasną. */
+:root {
+  --papier: #EEF0F4; --arkusz: #FFFFFF; --atrament: #161E33; --atrament-2: #47516A; --atrament-3: #757E93;
+  --linia: #DCE0E8; --zloto: #9A7428; --zloto-tlo: #F4ECD8; --lak: #8C1D2B; --granat: #1E2F5C; --granat-tlo: #E8ECF5;
+  --kroj-tytul: "Cormorant Garamond", "Palatino Linotype", Palatino, "Book Antiqua", "URW Palladio L", Georgia, serif;
+  --kroj-tekst: "Charis SIL", "Palatino Linotype", Palatino, "Book Antiqua", "URW Palladio L", Georgia, serif;
+  --kroj-etykieta: "Noto Sans", "Segoe UI", "Liberation Sans", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--papier); color: var(--atrament); font: 17px/1.62 var(--kroj-tekst); -webkit-text-size-adjust: 100%; }
+a { color: var(--granat); }
+.pasek { display: flex; align-items: center; gap: .6rem; padding: .6rem 1rem; background: var(--arkusz); border-bottom: 1px solid var(--zloto); flex-wrap: wrap; }
+.pasek svg { width: 30px; height: 30px; flex: none; }
+.pasek .nazwa { flex: 1; font: 500 1.35rem var(--kroj-tytul); color: var(--atrament); text-decoration: none; white-space: nowrap; }
+.pasek nav a { font: 600 .72rem var(--kroj-etykieta); letter-spacing: .12em; text-transform: uppercase; color: var(--granat); text-decoration: none; margin-left: 1rem; }
+.motyw { display: inline-flex; gap: .3rem; margin-left: 1rem; }
+.motyw button { font: 600 .66rem var(--kroj-etykieta); letter-spacing: .1em; text-transform: uppercase; color: var(--granat); background: transparent; border: 1px solid var(--linia); padding: .2rem .5rem; cursor: pointer; }
+html[data-theme="light"] .motyw [data-set-theme="light"], html[data-theme="dark"] .motyw [data-set-theme="dark"] { border-color: var(--granat); background: var(--granat-tlo); }
+
+.uklad { max-width: 78rem; margin: 1.2rem auto 3rem; padding: 0 1rem; display: grid; grid-template-columns: 15.5rem minmax(0, 1fr); gap: 1.4rem; align-items: start; }
+.szyna { position: sticky; top: 3.4rem; max-height: calc(100vh - 4.4rem); overflow: auto; background: var(--arkusz); box-shadow: 0 1px 3px var(--cien, rgba(22, 30, 51, .1)); padding: 1rem .9rem; font: .8rem/1.4 var(--kroj-etykieta); }
+.szyna .brew { margin-bottom: .5rem; }
+.szyna ol { list-style: none; margin: 0; padding: 0; }
+.szyna ol ol { margin: .15rem 0 .5rem .7rem; padding-left: .5rem; border-left: 1px solid var(--linia); }
+.szyna a { display: block; color: var(--atrament-2); text-decoration: none; padding: .12rem 0; }
+.szyna > ol > li > a { color: var(--atrament); font-weight: 600; margin-top: .35rem; }
+.szyna a:hover, .szyna a.tu { color: var(--granat); }
+.szyna a.tu { box-shadow: inset 2px 0 0 var(--zloto); padding-left: .4rem; }
+main { background: var(--arkusz); box-shadow: 0 1px 3px var(--cien, rgba(22, 30, 51, .1)); padding: 2.6rem 3rem 3rem; min-width: 0; }
+.tresc { max-width: 42rem; margin: 0 auto; }
+@media (max-width: 1080px) { .uklad { grid-template-columns: minmax(0, 1fr); } .szyna { display: none; } }
+@media (max-width: 640px) {
+  .uklad { margin: 0; padding: 0; }
+  main { padding: 1.3rem 1rem 2rem; box-shadow: none; }
+  .pasek nav { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: .2rem 1rem; }
+  .pasek nav a { margin: 0; white-space: nowrap; }
+  .motyw { margin-left: 0; }
+  body { font-size: 16.5px; }
+}
+
+/* nagłówki i tekst */
+.brew { font: 600 .7rem var(--kroj-etykieta); letter-spacing: .2em; text-transform: uppercase; color: var(--zloto); margin: 0; }
+h1 { font: 500 3rem/1.05 var(--kroj-tytul); font-variant-numeric: lining-nums; margin: .3rem 0 .4rem; letter-spacing: .01em; }
+.podtytul { font: italic 1.25rem/1.4 var(--kroj-tekst); color: var(--atrament-2); margin: 0 0 1.2rem; }
+h2 { font: 500 2.1rem/1.1 var(--kroj-tytul); margin: .3rem 0 .4rem; }
+h3 { font: 500 1.55rem/1.2 var(--kroj-tytul); margin: 2.6rem 0 .7rem; scroll-margin-top: 3.5rem; }
+h3 .par { display: block; font: 600 .7rem var(--kroj-etykieta); letter-spacing: .18em; text-transform: uppercase; color: var(--zloto); margin-bottom: .2rem; }
+h4 { font: 600 .74rem var(--kroj-etykieta); letter-spacing: .14em; text-transform: uppercase; color: var(--atrament-2); margin: 1.6rem 0 .4rem; }
+p { margin: 0 0 1rem; hyphens: auto; }
+p.lead::first-letter { float: left; font: 500 3.6rem/.8 var(--kroj-tytul); padding: .3rem .45rem 0 0; color: var(--atrament); }
+small, .podsumowanie { color: var(--atrament-2); }
+strong { font-weight: 700; }
+sup.ref { font: 600 .62rem var(--kroj-etykieta); line-height: 0; }
+sup.ref a { text-decoration: none; padding: 0 .08em; }
+.sep { height: 0; border: 0; border-top: 1px solid var(--zloto); margin: 2.4rem auto; width: 40%; position: relative; overflow: visible; }
+
+/* frontyspis */
+.front { text-align: left; padding-bottom: 1rem; }
+.front .pieciolinia { display: block; width: 100%; height: auto; margin: 1.2rem 0 1.4rem; }
+.motto { margin: 1.6rem 0 1.4rem; padding: .2rem 0 .2rem 1.1rem; border-left: 1px solid var(--zloto); font: italic 1.12rem/1.5 var(--kroj-tekst); color: var(--atrament-2); }
+.motto cite { display: block; font: 600 .66rem var(--kroj-etykieta); font-style: normal; letter-spacing: .14em; text-transform: uppercase; color: var(--atrament-3); margin-top: .35rem; }
+.depesza { display: grid; grid-template-columns: max-content 1fr; gap: .25rem 1.1rem; margin: .6rem 0 1.4rem; font-size: .95rem; }
+.depesza dt { font: 600 .66rem var(--kroj-etykieta); letter-spacing: .12em; text-transform: uppercase; color: var(--atrament-3); padding-top: .28rem; }
+.depesza dd { margin: 0; }
+.spis-inline { display: none; margin: 1rem 0 1.6rem; padding: .7rem .9rem; border-top: 1px solid var(--zloto); border-bottom: 1px solid var(--linia); }
+.spis-inline ol { margin: .3rem 0 0; padding-left: 1.2rem; font: .9rem/1.6 var(--kroj-etykieta); }
+@media (max-width: 1080px) { .spis-inline { display: block; } }
+
+/* księgi */
+.liber { padding-top: .6rem; }
+.liber-glowa { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 1.3rem; align-items: center; margin: 3.6rem 0 1.2rem; padding: 1.4rem 0 1.2rem; border-top: 3px double var(--zloto); border-bottom: 1px solid var(--zloto); scroll-margin-top: 3rem; }
+.liber-glowa svg { width: 7.5rem; height: 7.5rem; }
+.liber-glowa .lat { font: italic 1.04rem/1.45 var(--kroj-tekst); color: var(--atrament-2); margin: .3rem 0 0; }
+@media (max-width: 640px) { .liber-glowa { grid-template-columns: 4.6rem minmax(0, 1fr); gap: .9rem; } .liber-glowa svg { width: 4.6rem; height: 4.6rem; } h1 { font-size: 2.3rem; } h2 { font-size: 1.7rem; } }
+
+/* ramki */
+.nota, .umbra, .teza, .info { margin: 1.4rem 0; padding: .8rem 1rem .3rem; font-size: .95rem; }
+.nota { border-left: 3px solid var(--zloto); background: var(--zloto-tlo); }
+.info { border-left: 3px solid var(--granat); background: var(--granat-tlo); }
+.umbra { border-left: 3px solid var(--lak); background: var(--blad-tlo, #FBEFF0); }
+.et { display: block; letter-spacing: .16em; text-transform: uppercase; margin-bottom: .35rem; }
+.nota > .et, .teza > .et { font: 600 .7rem var(--kroj-etykieta); color: var(--zloto); }
+.umbra > .et { font: 600 .7rem var(--kroj-etykieta); color: var(--lak); }
+.info > .et, .propozycja > .et { font: 600 .7rem var(--kroj-etykieta); color: var(--granat); }
+.umbra ul, .nota ul, .info ul { margin: 0 0 .8rem; padding-left: 1.2rem; }
+.umbra li, .nota li, .info li { margin-bottom: .3rem; }
+.teza { border-top: 3px double var(--zloto); border-bottom: 1px solid var(--zloto); padding: .9rem .2rem .4rem; font-size: 1.04rem; margin: 2.4rem 0 1rem; }
+.wyrwa { margin: 2rem 0; padding: 1rem 0; border-top: 1px solid var(--zloto); border-bottom: 1px solid var(--zloto); text-align: center; font: italic 500 1.5rem/1.35 var(--kroj-tytul); color: var(--atrament); }
+.wyrwa cite { display: block; margin-top: .5rem; font: 600 .66rem var(--kroj-etykieta); font-style: normal; letter-spacing: .14em; text-transform: uppercase; color: var(--atrament-3); }
+.propozycja { margin: 1.4rem 0; padding: .8rem 1rem .3rem; border: 1px solid var(--linia); border-top: 2px solid var(--granat); }
+
+/* oględziny (protokół świeżym okiem) */
+.ogledziny { counter-reset: obs; list-style: none; padding: 0; margin: 1rem 0 1.4rem; }
+.ogledziny > li { counter-increment: obs; position: relative; padding: .7rem 0 .7rem 2.6rem; border-bottom: 1px solid var(--linia); }
+.ogledziny > li::before { content: counter(obs); position: absolute; left: 0; top: .55rem; width: 1.8rem; height: 1.8rem; border: 1px solid var(--zloto); border-radius: 50%; text-align: center; font: 500 1.1rem/1.75rem var(--kroj-tytul); color: var(--atrament); }
+.ogledziny .kotwica { display: block; margin-top: .3rem; font-size: .88rem; color: var(--atrament-2); }
+.ogledziny .kotwica::before { content: "kotwica · "; font: 600 .62rem var(--kroj-etykieta); letter-spacing: .14em; text-transform: uppercase; color: var(--atrament-3); }
+.przew { font-size: .95rem; color: var(--atrament-2); }
+
+/* kafle liczb */
+.kafle { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap: .9rem; margin: 1.6rem 0; }
+.kafle > div { border-top: 2px solid var(--zloto); padding-top: .45rem; }
+.kafle .k { display: block; font: 600 .64rem var(--kroj-etykieta); letter-spacing: .13em; text-transform: uppercase; color: var(--atrament-3); }
+.kafle .v { display: block; font: 500 1.9rem/1.15 var(--kroj-tytul); font-variant-numeric: lining-nums; color: var(--atrament); }
+.kafle .d { display: block; font-size: .85rem; line-height: 1.35; color: var(--atrament-2); }
+
+/* złoty pas — jeden na stronę */
+.zloty-pas { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; background: var(--zloto-tlo); border-top: 1px solid var(--zloto); border-bottom: 1px solid var(--zloto); padding: .6rem .8rem; margin: 1.4rem 0; }
+.zloty-pas span { font: 600 .7rem var(--kroj-etykieta); letter-spacing: .14em; text-transform: uppercase; color: var(--atrament-2); }
+.zloty-pas b { font: 600 1.7rem var(--kroj-tytul); color: var(--atrament); font-variant-numeric: lining-nums; }
+
+/* tabele */
+.tabwrap { overflow-x: auto; margin: 1.2rem 0 1.4rem; }
+table { width: 100%; border-collapse: collapse; font-size: .93rem; }
+caption { caption-side: top; text-align: left; font: 600 .7rem var(--kroj-etykieta); letter-spacing: .14em; text-transform: uppercase; color: var(--zloto); padding-bottom: .4rem; }
+th { font: 600 .66rem var(--kroj-etykieta); letter-spacing: .12em; text-transform: uppercase; color: var(--atrament-3); text-align: left; border-bottom: 1px solid var(--zloto); padding: .35rem .6rem .35rem .3rem; white-space: nowrap; }
+td { border-bottom: 1px solid var(--linia); padding: .5rem .6rem .5rem .3rem; vertical-align: top; }
+td.y { white-space: nowrap; font-variant-numeric: tabular-nums; font-weight: 700; }
+td.ico { width: 3rem; }
+td.ico svg { width: 2.6rem; height: 2.6rem; display: block; }
+.stan { font: 600 .62rem var(--kroj-etykieta); letter-spacing: .1em; text-transform: uppercase; padding: .1rem .45rem; border: 1px solid var(--linia); color: var(--atrament-2); white-space: nowrap; }
+.stan-ok { color: var(--ok, #2E6B3F); border-color: var(--ok-linia, #9CC5A8); background: var(--ok-tlo, #EEF6F0); }
+.stan-toku { color: var(--atrament); border-color: var(--toku-linia, #E3D2A6); background: var(--zloto-tlo); }
+.stan-lak { color: var(--lak); border-color: var(--blad-linia, #D9A3AA); background: var(--blad-tlo, #FBEFF0); }
+
+/* ikony (rysowane ręcznie, kolor wyłącznie z tokenów) */
+.ikony { display: grid; grid-template-columns: repeat(auto-fit, minmax(8.6rem, 1fr)); gap: 1rem .9rem; margin: 1.8rem 0; padding: 1rem 0; border-top: 1px solid var(--linia); border-bottom: 1px solid var(--linia); }
+.ik { margin: 0; text-align: center; }
+.ik svg { width: 3.6rem; height: 3.6rem; display: block; margin: 0 auto .35rem; }
+.ik figcaption { font-size: .8rem; line-height: 1.35; color: var(--atrament-2); }
+.ik figcaption b { display: block; font: 600 .64rem var(--kroj-etykieta); letter-spacing: .12em; text-transform: uppercase; color: var(--atrament); margin-bottom: .15rem; }
+svg.ry * { fill: none; stroke: var(--atrament); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+svg.ry .z { stroke: var(--zloto); }
+svg.ry .l { stroke: var(--lak); }
+svg.ry .g { stroke: var(--granat); }
+svg.ry .cz { stroke: var(--atrament-3); stroke-width: 1; }
+svg.ry .gr { stroke-width: 3.2; }
+svg.ry .zf { fill: var(--zloto); stroke: none; }
+svg.ry .af { fill: var(--atrament); stroke: none; }
+svg.ry .lf { fill: var(--lak); stroke: none; }
+svg.ry .gf { fill: var(--granat); stroke: none; }
+svg.ry .tlo { fill: var(--zloto-tlo); stroke: var(--zloto); }
+svg.ry .cien { fill: var(--granat-tlo); stroke: none; }
+svg.ry .kr { stroke-dasharray: 3 4; }
+svg.ry text { fill: var(--atrament-2); stroke: none; font: 600 9px var(--kroj-etykieta); letter-spacing: .08em; text-transform: uppercase; }
+
+/* wykresy */
+.wykres { margin: 1.8rem 0; }
+.wk-wrap { overflow-x: auto; }
+.wk { display: block; width: 100%; height: auto; min-width: 540px; }
+.wk text { font: 11px var(--kroj-etykieta); fill: var(--atrament-2); }
+.wk .t { font-weight: 600; fill: var(--atrament); }
+.wk .m { fill: var(--atrament-3); font-size: 10px; }
+.wk .os { stroke: var(--linia); stroke-width: 1; }
+.wk .os2 { stroke: var(--atrament-3); stroke-width: 1; }
+.wk .pion { stroke: var(--zloto); stroke-width: 1; stroke-dasharray: 3 3; }
+.wk .noc { fill: var(--granat-tlo); }
+.wk .strz { stroke: var(--zloto); stroke-width: 2; }
+.wk .pas-g { fill: var(--granat-tlo); stroke: var(--granat); stroke-width: 1.2; }
+.wk .pas-z { fill: var(--zloto-tlo); stroke: var(--zloto); stroke-width: 1.2; }
+.wk .pas-l { fill: var(--blad-tlo, #FBEFF0); stroke: var(--lak); stroke-width: 1.2; }
+.wk .pauza { fill: var(--zloto); }
+.wk .ok { fill: var(--ok-tlo, #EEF6F0); stroke: var(--ok, #2E6B3F); stroke-width: 1.2; }
+.wk .znak { fill: var(--atrament); }
+.wk .k-forma { fill: none; stroke: var(--granat); stroke-width: 2; }
+.wk .k-zmecz { fill: none; stroke: var(--lak); stroke-width: 2; stroke-dasharray: 6 4; }
+.wk .k-wynik { fill: none; stroke: var(--atrament); stroke-width: 2.6; }
+.wk .lz { fill: var(--lak); }
+.wk .lg { fill: var(--granat); }
+.wykres figcaption { font-size: .85rem; color: var(--atrament-2); margin-top: .5rem; padding-top: .45rem; border-top: 1px solid var(--linia); }
+.wykres figcaption b { font: 600 .66rem var(--kroj-etykieta); letter-spacing: .13em; text-transform: uppercase; color: var(--atrament); margin-right: .4rem; }
+
+/* drobne: tagi w tekście, argumentum, kolumny tabel, ikony w notacji a2/a3/f */
+code { font: 600 .64rem var(--kroj-etykieta); letter-spacing: .1em; text-transform: uppercase; padding: .05rem .4rem; border: 1px solid var(--linia); color: var(--atrament-2); white-space: nowrap; }
+td.nm { font-weight: 700; }
+td.w { color: var(--atrament-2); font-size: .88rem; }
+.argumentum { margin: 1rem 0 1.4rem; padding: .9rem 0 .2rem; border-top: 1px solid var(--linia); }
+.argumentum ol { padding-left: 1.3rem; }
+.argumentum li { margin-bottom: .4rem; }
+svg.ry .a2 { stroke: var(--zloto); }
+svg.ry .a3 { stroke: var(--granat); }
+svg.ry .f { fill: var(--atrament); stroke: none; }
+svg.ry .a2.f { fill: var(--zloto); }
+svg.ry .a3.f { fill: var(--granat); }
+
+/* bibliografia i koda */
+.bib li b { font-weight: 600; }
+.bib ol { padding-left: 2.2rem; font-size: .88rem; line-height: 1.5; }
+.bib li { margin-bottom: .45rem; scroll-margin-top: 3.5rem; }
+.bib li:target { background: var(--zloto-tlo); }
+.stopka { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 1.2rem; align-items: center; margin-top: 2.6rem; padding-top: 1.2rem; border-top: 3px double var(--zloto); font-size: .9rem; color: var(--atrament-2); }
+.pieczec { width: 6.5rem; height: 6.5rem; }
+.pieczec .lak { fill: var(--lak); }
+.pieczec .lak-r { fill: none; stroke: var(--arkusz); stroke-width: 1.2; opacity: .75; }
+.pieczec text { fill: var(--arkusz); font: 500 26px var(--kroj-tytul); letter-spacing: .08em; }
+
+/* ── Depesza nocą: „popiół i sadza” (z raport-ciemny.html, bez zmian wartości) ── */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --papier: #1F1E1D; --arkusz: #2A2928; --atrament: #D3D0CB; --atrament-2: #ABA7A0; --atrament-3: #96928C;
+    --linia: #3B3A38; --zloto: #B39C72; --zloto-tlo: #33302A; --lak: #C4847E; --granat: #A8B0BA; --granat-tlo: #33353A;
+    --na-laku: #1F1E1D; --cien: rgba(0, 0, 0, .35);
+    --ok: #86AD96; --ok-linia: #4E6B5A; --ok-tlo: #26302A; --blad-linia: #6E4744; --blad-tlo: #352827; --toku-linia: #5E5340;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --papier: #1F1E1D; --arkusz: #2A2928; --atrament: #D3D0CB; --atrament-2: #ABA7A0; --atrament-3: #96928C;
+  --linia: #3B3A38; --zloto: #B39C72; --zloto-tlo: #33302A; --lak: #C4847E; --granat: #A8B0BA; --granat-tlo: #33353A;
+  --na-laku: #1F1E1D; --cien: rgba(0, 0, 0, .35);
+  --ok: #86AD96; --ok-linia: #4E6B5A; --ok-tlo: #26302A; --blad-linia: #6E4744; --blad-tlo: #352827; --toku-linia: #5E5340;
+  color-scheme: dark;
+}
+@media print { .szyna, .motyw, .pasek nav { display: none; } .uklad { display: block; } main { box-shadow: none; } }
+
+/* dopisane dla serii „Sójka” / „Moimi słowami”: identyfikatory w tekście i wiadomości z czatu (tylko tokeny) */
+code.kod { font: .84em ui-monospace, "Cascadia Mono", "DejaVu Sans Mono", monospace; letter-spacing: 0; text-transform: none; padding: .05em .3em; border: 1px solid var(--linia); color: var(--atrament); white-space: normal; overflow-wrap: anywhere; }
+pre.blok { font: .8rem/1.55 ui-monospace, "Cascadia Mono", "DejaVu Sans Mono", monospace; background: var(--papier); border: 1px solid var(--linia); color: var(--atrament); padding: .7rem .9rem; margin: .4rem 0 1rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+.wiad .msg { font: .92rem/1.5 var(--kroj-etykieta); margin: 0 0 .5rem; }
+.wiad ul.msg { padding-left: 1.2rem; }
+.kafle .stan { display: inline-block; margin-top: .35rem; }
+.propozycja h4 { margin: .2rem 0 .5rem; }
+</style>
+</head>
+<body>
+<header class="pasek">
+  <svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><circle class="z" cx="32" cy="32" r="28"/><path d="M12 30h40l-13 14v8l-14 4V44z"/><circle class="zf" cx="22" cy="20" r="2"/><circle class="zf" cx="32" cy="17" r="2"/><circle class="zf" cx="42" cy="21" r="2"/></svg>
+  <a class="nazwa" href="#gora">Sójka, orzechówka i CLAUDE.md</a>
+  <nav><a href="#krotka">I · Krótka</a><a href="#szuflady">II · Szuflady</a><a href="#przyszlosc">III · Mapa</a><a href="#noc">IV · Noc</a><a href="#kolonia">V · Kolonia</a><a href="#swieze">VI · Świeże oko</a></nav>
+  <span class="motyw" role="group" aria-label="motyw"><button type="button" data-set-theme="light">☀ dzień</button><button type="button" data-set-theme="dark">☾ noc</button></span>
+</header>
+
+<div class="uklad">
+<aside class="szyna" aria-label="Spis treści" data-narration-skip="true">
+  <p class="brew">Spis</p>
+  <ol>
+    <li><a href="#gora">Frontyspis</a></li>
+    <li><a href="#krotka">Liber I · Krótka pamięć</a>
+      <ol>
+        <li><a href="#s1">§ 1 Człowiek, który rysował gwiazdę</a></li>
+        <li><a href="#s2">§ 2 Dwanaście liter</a></li>
+        <li><a href="#s3">§ 3 Stół na cztery rzeczy</a></li>
+      </ol>
+    </li>
+    <li><a href="#szuflady">Liber II · Szuflady</a>
+      <ol>
+        <li><a href="#s4">§ 4 Sójka i larwa</a></li>
+        <li><a href="#s5">§ 5 Wiedza bez wspomnienia</a></li>
+        <li><a href="#s6">§ 6 Ręka wie lepiej</a></li>
+        <li><a href="#s7">§ 7 Odruchy</a></li>
+      </ol>
+    </li>
+    <li><a href="#przyszlosc">Liber III · Mapa i jutro</a>
+      <ol>
+        <li><a href="#s8">§ 8 Biblioteka po drodze</a></li>
+        <li><a href="#s9">§ 9 Przesunięte patyki</a></li>
+      </ol>
+    </li>
+    <li><a href="#noc">Liber IV · Noc</a>
+      <ol>
+        <li><a href="#s10">§ 10 Sen, który przegląda dzień</a></li>
+        <li><a href="#s11">§ 11 Wspomnienie otwarte do edycji</a></li>
+        <li><a href="#s12">§ 12 Matrona i muszka</a></li>
+        <li><a href="#s13">§ 13 Ktoś patrzył</a></li>
+      </ol>
+    </li>
+    <li><a href="#kolonia">Liber V · Kolonia</a>
+      <ol>
+        <li><a href="#s14">§ 14 Mrówka nie pamięta</a></li>
+        <li><a href="#s15">§ 15 Gdzie te analogie kłamią</a></li>
+        <li><a href="#s16">§ 16 Jutro rano</a></li>
+      </ol>
+    </li>
+    <li><a href="#swieze">Liber VI · Świeże oko</a></li>
+    <li><a href="#koda">Koda</a></li>
+    <li><a href="#zrodla">Źródła</a></li>
+  </ol>
+</aside>
+
+<main id="gora">
+<div class="tresc">
+
+<section class="front">
+  <p class="brew">Czytelnia · pamięć i maszyny · opowieść Bajarza</p>
+  <h1>Sójka, orzechówka i CLAUDE.md</h1>
+  <p class="podtytul">Mózg nie ma jednej pamięci, tylko cały zwierzyniec. Opowieść o tym, czego ten zwierzyniec uczy agenta, który co rano budzi się bez wczoraj.</p>
+
+  <svg class="ry pieciolinia" viewBox="0 0 640 130" role="img" aria-label="Kaskada pamięci: szerokie sito zmysłów, mały stół roboczy na cztery rzeczy, trzy szuflady pamięci długotrwałej i księżyc nocnego snu, od którego strzałka wraca do szuflad." data-narration="Rysunek pokazuje kaskadę pamięci. Najpierw szerokie sito zmysłów, przez które prawie wszystko przelatuje. Potem mały stół roboczy na mniej więcej cztery rzeczy. Dalej trzy szuflady: epizody, fakty i umiejętności. Na końcu księżyc, czyli nocny sen, który porządkuje szuflady.">
+    <path d="M40 24h80l-28 30v26l-24 8V54z"/><path class="cz" d="M52 34h56"/>
+    <circle class="zf" cx="54" cy="14" r="2.4"/><circle class="zf" cx="70" cy="10" r="2.4"/><circle class="zf" cx="86" cy="13" r="2.4"/><circle class="zf" cx="102" cy="9" r="2.4"/><circle class="zf" cx="62" cy="18" r="2"/><circle class="zf" cx="96" cy="18" r="2"/>
+    <circle class="af" cx="80" cy="84" r="2"/>
+    <path class="z" d="M132 50h52M180 45l5 5-5 5"/>
+    <path d="M198 54h84M206 54v28M274 54v28"/>
+    <rect class="tlo" x="204" y="36" width="14" height="16"/><rect class="tlo" x="223" y="40" width="14" height="12"/><rect class="tlo" x="242" y="34" width="14" height="18"/><rect class="tlo" x="261" y="41" width="13" height="11"/>
+    <path class="z" d="M294 50h52M342 45l5 5-5 5"/>
+    <rect x="362" y="20" width="64" height="66"/><path d="M362 42h64M362 64h64"/><path class="z" d="M386 31h16M386 53h16M386 75h16"/>
+    <path class="z" d="M438 50h52M486 45l5 5-5 5"/>
+    <path d="M542 22a26 26 0 1 0 18 46 21 21 0 0 1-18-46z"/><circle class="zf" cx="510" cy="26" r="1.8"/><circle class="zf" cx="584" cy="30" r="1.4"/>
+    <path class="z kr" d="M540 88c-20 14-84 14-104 0"/><path class="z" d="M440 84l-4 4 6 2"/>
+    <text x="80" y="108" text-anchor="middle">sito zmysłów</text>
+    <text x="240" y="108" text-anchor="middle">stół roboczy</text>
+    <text x="394" y="108" text-anchor="middle">szuflady</text>
+    <text x="548" y="108" text-anchor="middle">sen</text>
+  </svg>
+
+  <dl class="depesza">
+    <dt>Nadawca</dt><dd>Bajarz</dd>
+    <dt>Adresat</dt><dd>każdy, kto rano otwiera terminal, a jego agent widzi repozytorium pierwszy raz</dd>
+    <dt>Dotyczy</dt><dd>rodzaje pamięci ludzi i zwierząt jako projekt pamięci wielosesyjnej Claude Code</dd>
+    <dt>Sporządzono</dt><dd>30.10.2026</dd>
+    <dt>Ciąg dalszy</dt><dd><a href="../moimi-slowami/">„Moimi słowami”</a>: jak zapisać w pliku własny głos</dd>
+    <dt>Załączniki</dt><dd>ściąga pamięci, plan na jutro rano, sześć pomysłów agenta o świeżym oku, źródła</dd>
+  </dl>
+
+  <blockquote class="motto">Żadna mrówka nic nie pamiętała, ale w pewnym sensie kolonia tak.<cite>Deborah Gordon o mrówkach żniwiarkach</cite></blockquote>
+
+  <div class="ikony">
+    <figure class="ik"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 30h48M14 30v22M50 30v22"/><rect class="tlo" x="12" y="16" width="8" height="12"/><rect class="tlo" x="23" y="18" width="8" height="10"/><rect class="tlo" x="34" y="14" width="8" height="14"/><rect class="tlo" x="45" y="19" width="7" height="9"/></svg><figcaption><b>I · Krótka pamięć</b>sito zmysłów i stół, na którym mieszczą się cztery rzeczy</figcaption></figure>
+    <figure class="ik"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><rect x="12" y="8" width="40" height="48"/><path d="M12 24h40M12 40h40"/><path class="z" d="M28 16h8M28 32h8M28 48h8"/></svg><figcaption><b>II · Szuflady</b>epizody, fakty, umiejętności i odruchy</figcaption></figure>
+    <figure class="ik"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 50l14-6 18 6 16-6V12l-16 6-18-6-14 6z"/><path class="cz" d="M22 12v32M40 18v32"/><path class="l" d="M32 32c-5-7-8-10-8-14a8 8 0 0 1 16 0c0 4-3 7-8 14z"/><circle class="lf" cx="32" cy="18" r="2.4"/></svg><figcaption><b>III · Mapa i jutro</b>zamiary przypięte do miejsc i kryjówki względem patyków</figcaption></figure>
+    <figure class="ik"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><path d="M38 10a20 20 0 1 0 16 32A16 16 0 0 1 38 10z"/><circle class="zf" cx="14" cy="14" r="1.8"/><circle class="zf" cx="54" cy="12" r="1.4"/><path class="cz" d="M8 58h48"/></svg><figcaption><b>IV · Noc</b>sen, rekonsolidacja, zapominanie i podglądana sójka</figcaption></figure>
+    <figure class="ik"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><path class="z kr" d="M8 52C20 40 28 46 36 34s12-18 20-22"/><circle class="af" cx="14" cy="47" r="2.6"/><circle class="af" cx="29" cy="42" r="2.6"/><circle class="af" cx="43" cy="24" r="2.6"/><path d="M50 48h10v10H50zM4 6h10v10H4z"/></svg><figcaption><b>V · Kolonia</b>pamięć, której nie ma żaden pojedynczy agent</figcaption></figure>
+    <figure class="ik"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><path d="M6 32c8-12 18-18 26-18s18 6 26 18c-8 12-18 18-26 18S14 44 6 32z"/><circle cx="32" cy="32" r="8"/><circle class="af" cx="32" cy="32" r="3"/><path class="z" d="M32 4v5M12 10l3 4M52 10l-3 4"/></svg><figcaption><b>VI · Świeże oko</b>sześć pomysłów, których nie ma w żadnym przeglądzie</figcaption></figure>
+  </div>
+</section>
+
+<section class="liber" id="krotka">
+  <div class="liber-glowa">
+    <svg class="ry" viewBox="0 0 120 120" aria-hidden="true">
+      <circle class="z" cx="60" cy="60" r="54"/><circle class="cz" cx="60" cy="60" r="49"/>
+      <path class="g" d="M60 24v72"/><path d="M40.0 43.0L44.1 54.3L56.2 54.7L46.7 62.2L50.0 73.8L40.0 67.0L30.0 73.8L33.3 62.2L23.8 54.7L35.9 54.3Z"/><path class="z kr" d="M80.0 43.0L84.1 54.3L96.2 54.7L86.7 62.2L90.0 73.8L80.0 67.0L70.0 73.8L73.3 62.2L63.8 54.7L75.9 54.3Z"/>
+      <path class="z" d="M44 92h32M48 96h24"/>
+    </svg>
+    <div>
+      <p class="brew">Liber I · Krótka pamięć</p>
+      <h2>Wszystko wpada, prawie nic nie zostaje</h2>
+      <p class="lat">O człowieku, który co dzień widział zadanie pierwszy raz, o literach, które gasną w sekundę, i o stole, na którym mieszczą się cztery rzeczy.</p>
+    </div>
+  </div>
+
+  <h3 id="s1"><span class="par">§ 1</span>Człowiek, który rysował gwiazdę</h3>
+  <p class="lead">Wyobraź sobie salę badań w Montrealu. Mężczyzna siedzi nad kartką z gwiazdą i ma ją obrysować ołówkiem. Haczyk polega na tym, że rękę widzi tylko w lustrze. Pierwszego dnia ręka błądzi. Trzeciego idzie prawie bez błędów. A on za każdym razem jest pewien, że robi to pierwszy raz w życiu.</p>
+  <p>To Henry Molaison, w podręcznikach H.M. W 1953 roku chirurdzy usunęli mu przednie części obu hipokampów, żeby zatrzymać padaczkę. Padaczka ustąpiła. Razem z nią zniknęła zdolność tworzenia nowych trwałych wspomnień o faktach i zdarzeniach. Została jednak pamięć ręki. Uczyła się czegoś, o czym głowa nie miała pojęcia.</p>
+  <p>Znasz ten obraz z własnego terminala. Każda sesja Claude Code zaczyna się od świeżego okna kontekstu. Rano otwierasz terminal, a twój pomocnik widzi repozytorium pierwszy raz. Wczorajsza dwugodzinna rozmowa o tym, czemu testy integracyjne potrzebują lokalnego Redisa, przepadła.</p>
+  <p>Zapytajmy więc, czego o pamięci między sesjami mogą nas nauczyć mózg, sójka i orzechówka. Okaże się, że całkiem sporo. Pierwsza lekcja przychodzi od razu: „pamięć” to zbiorcza nazwa na kilkanaście różnych urządzeń, a nie jedno urządzenie.</p>
+  <div class="info"><span class="et">Umowa z czytelnikiem</span><p>Badania referuję tak, jak podają je źródła. Przekład na Claude Code to w większości propozycje, a nie istniejące funkcje. Tam, gdzie opisuję, co Claude Code już robi, opieram się na jego dokumentacji w wersji z października 2026.</p></div>
+
+  <h3 id="s2"><span class="par">§ 2</span>Dwanaście liter</h3>
+  <p>Rok 1960. George Sperling na ułamek sekundy pokazuje ci dwanaście liter. Ktoś pyta, co było na ekranie. Wymieniasz trzy, może cztery. A jednak gdy zaraz po błysku dźwięk wskaże jeden rząd, odczytujesz go prawie bez błędu. Wszystkie litery były w twojej głowie. Po prostu zgasły szybciej, niż dało się je wypowiedzieć.</p>
+  <p>Tak działa pamięć sensoryczna. Obraz trzyma się poniżej sekundy, dźwięk kilka sekund, bo dźwięku nie da się obejrzeć drugi raz. Najważniejszą robotę wykonuje tu sito, a nie magazyn.</p>
+  <p>W Claude Code tym sitem jest surowy wynik narzędzi: log z testów, ślad stosu, odpowiedź API. Wpada do kontekstu, coś się z niego bierze i powinien zniknąć. Kompaktowanie najpierw czyści stare wyniki narzędzi. To biologiczne maskowanie i warto je zaakceptować. Plik na dysku możesz przeczytać jeszcze raz, więc nie musisz go pamiętać. Ulotne są tylko rzeczy jednorazowe, na przykład ślad błędu z CI albo wynik migracji na stagingu.</p>
+  <div class="propozycja"><span class="et">Pomysł</span><p>Zasada „nic surowego do pamięci”. Notatka między sesjami zapisuje wniosek („test X jest niestabilny, bo zależy od strefy czasowej”), a nie wklejony log. Jeśli dowód ma przetrwać, niech hook <code class="kod">PostToolUse</code> odłoży jednorazowe wyniki do osobnego katalogu z rotacją na dwie doby.</p></div>
+
+  <h3 id="s3"><span class="par">§ 3</span>Stół na cztery rzeczy</h3>
+  <p>Teraz usiądź przy stole warsztatowym. Jest mały. Nelson Cowan policzył, że mieszczą się na nim mniej więcej cztery rzeczy naraz, a nie siedem, jak mówiło stare powiedzenie. Da się oszukać ten limit tylko w jeden sposób: pakując wiele drobiazgów w jedną paczkę, którą rozumiesz.</p>
+  <p>Alan Baddeley dorzucił do stołu kierownika, który niczego nie przechowuje, tylko kieruje uwagą. Szczury w labiryncie z wieloma ramionami pokazały jeszcze jedno rozróżnienie: „w tym ramieniu już byłem” to coś innego niż „te ramiona w ogóle się opłacają”.</p>
+  <p>Dla agenta tym stołem jest okno kontekstu. Jego pojemność liczy się w spójnych jednostkach uwagi, a nie w tokenach. Badacze systemu MemGPT kazali modelowi bić na alarm przy siedemdziesięciu procentach zapełnienia, żeby zdążył zapisać ważne rzeczy, zanim zostaną wypchnięte.</p>
+  <div class="propozycja"><span class="et">Pomysł</span><ul>
+    <li>Stan bieżącego zadania trzymaj w pliku, który przetrwa kompaktowanie, na przykład w regule bez pola <code class="kod">paths</code>. Nigdy tylko w rozmowie. Najwyżej cztery aktywne cele, reszta w kolejce.</li>
+    <li>Prowadź tabu-listę jak szczur w labiryncie: plik „co już sprawdziłem i odrzuciłem”, który hook przy starcie po kompaktowaniu wstrzykuje z powrotem.</li>
+    <li>Duże czytanie oddawaj subagentom. Wracają z jedną paczką zamiast piętnastu faktów. To jest dokładnie chunking.</li>
+  </ul></div>
+</section>
+
+<section class="liber" id="szuflady">
+  <div class="liber-glowa">
+    <svg class="ry" viewBox="0 0 120 120" aria-hidden="true">
+      <circle class="z" cx="60" cy="60" r="54"/><circle class="cz" cx="60" cy="60" r="49"/>
+      <rect x="36" y="28" width="48" height="60"/><path d="M36 48h48M36 68h48"/><path class="z" d="M54 38h12M54 58h12M54 78h12"/>
+      <path class="z" d="M44 96h32"/>
+    </svg>
+    <div>
+      <p class="brew">Liber II · Szuflady</p>
+      <h2>Epizody, fakty i umiejętności</h2>
+      <p class="lat">O sójce, która wie, kiedy larwa się psuje, o wiedzy, która zapomniała, skąd przyszła, i o ręce, która pamięta bez głowy.</p>
+    </div>
+  </div>
+
+  <p class="lead">H.M. stracił jedną szufladę, a zachował drugą. To najważniejszy wniosek z jego historii: fakty i zdarzenia mieszkają w mózgu gdzie indziej niż umiejętności i odruchy. Agent też powinien trzymać je osobno i sięgać po nie innymi drogami.</p>
+
+  <h3 id="s4"><span class="par">§ 4</span>Sójka i larwa</h3>
+  <p>Zachodnia sójka zakopuje jedzenie. Larwę, która jest pyszna, ale szybko się psuje, i orzech, który poczeka. W 1998 roku Nicola Clayton i Anthony Dickinson pokazali, że sójka pamięta, co schowała, gdzie i kiedy. Gdy od schowania larwy minęło za dużo czasu, sójka po nią nie wraca. Idzie po orzech.</p>
+  <p>Badacze byli ostrożni. Nazwali to pamięcią epizodopodobną, bo nie da się wykazać, że ptak przeżywa wspomnienie tak jak człowiek. Zapamiętaj tę ostrożność, przyda się później.</p>
+  <p>Teraz popatrz na swoje notatki. „Build jest zielony” psuje się w godzinę jak larwa. „Migracje bazy leżą w katalogu <code class="kod">migrations/</code>” wytrzyma miesiące jak orzech. Claude Code dopisuje do plików pamięci czas zapisu, czyli sójcze „kiedy”. Brakuje mu jednak „do kiedy”.</p>
+  <div class="propozycja"><span class="et">Pomysł</span><p>Każdy epizod ma pola co, gdzie (ścieżka, gałąź), kiedy, w jakim celu i jak się skończył, a do tego termin przydatności zależny od rodzaju treści. Daty zawsze bezwzględne: „w przyszły czwartek” zapisane w październiku nic nie znaczy w grudniu. Osobno prowadź dziennik „co próbowałem i co nie wyszło”. System pamięci Zep trzyma epizody bez strat, a mimo to wypada o 17,7% gorzej na pytaniach o to, co powiedział sam asystent.</p></div>
+
+  <h3 id="s5"><span class="par">§ 5</span>Wiedza bez wspomnienia</h3>
+  <p>Wiesz, że Warszawa leży nad Wisłą. Nie pamiętasz lekcji, z której to wiesz. To pamięć semantyczna: wiedza, która zapomniała, skąd przyszła. Rośnie z wielu podobnych epizodów.</p>
+  <p>Frederic Bartlett opowiadał Anglikom indiańską legendę i prosił, żeby ją powtórzyli. W powtórzeniach „kanoe” zamieniały się w „łodzie”. To, co nie pasowało do schematu, znikało albo się prostowało. Dlatego w notatkach o projekcie najcenniejsze są wyjątki: „ten moduł nie używa autowiringu, bo integruje stary kod przez fasadę”. To właśnie one giną najszybciej.</p>
+  <p>W Claude Code pamięcią semantyczną jest CLAUDE.md. Dokumentacja ma tu kryterium, które mógłby podpisać kognitywista: wpis warto dodać, gdy Claude popełnia ten sam błąd drugi raz albo gdy wpisujesz w czacie tę samą poprawkę co w poprzedniej sesji. Powtarzający się epizod zamienia się w wiedzę.</p>
+  <div class="propozycja"><span class="et">Pomysł</span><p>Zapisuj „dlaczego”, nie tylko „co”. Gdy decyzja się zmienia, nie kasuj starego wpisu, tylko oznacz go jako nieważny od dziś. Nowsze wygrywa, a historia zostaje. Główny CLAUDE.md trzymaj krótko, wiedzę o jednym zakątku repozytorium przenieś do reguł z polem <code class="kod">paths</code>.</p></div>
+
+  <h3 id="s6"><span class="par">§ 6</span>Ręka wie lepiej</h3>
+  <p>Wróć do gwiazdy w lustrze. Ręka H.M. nauczyła się zadania bez żadnego wspomnienia o ćwiczeniu. To pamięć proceduralna. U agentów daje największe i najpewniejsze zyski. Voyager, agent grający w Minecrafta z biblioteką umiejętności zapisanych jako kod, zdobywał 3,3 razy więcej unikalnych przedmiotów. ExpeL prowadzi listę lekcji z wagami: nowa lekcja startuje z wagą dwa, a gdy waga spadnie do zera, lekcja znika.</p>
+  <p>Claude Code ma tu dwa mechanizmy i dokumentacja jasno je rozdziela. Wieloetapowe przepisy idą do skilli, ładowanych dopiero wtedy, gdy są potrzebne. To, co musi się wydarzyć zawsze, idzie do hooków, czyli poleceń uruchamianych w stałych punktach sesji niezależnie od tego, co zdecyduje model. Dokumentacja przypomina też uczciwie, że CLAUDE.md to kontekst, a nie konfiguracja. Model go czyta, ale nie ma obowiązku słuchać.</p>
+  <blockquote class="wyrwa">Hook jest ręką, która obrysowuje gwiazdę bez udziału świadomości. Nie musi niczego pamiętać.</blockquote>
+  <div class="propozycja"><span class="et">Pomysł</span><p>Dziel zasady według kosztu ich złamania. Musi zadziałać zawsze: hook, a blokada przez <code class="kod">PreToolUse</code>. Wymaga osądu: CLAUDE.md. Długi przepis: skill. Nowy skill niech powstaje tylko z sesji, która się udała, i tylko z wzorca powtórzonego co najmniej dwa razy.</p></div>
+
+  <h3 id="s7"><span class="par">§ 7</span>Odruchy</h3>
+  <p>Pod szufladami są jeszcze odruchy. Torowanie: świeży bodziec przesuwa to, jak myślisz o następnym. Warunkowanie: sygnał zapowiada skutek. Habituacja: przestajesz reagować na to, co się powtarza i nic nie znaczy.</p>
+  <p>Każdy z nich ma odpowiednik w hooku albo w krótkim pliku. Torowanie to hook <code class="kod">UserPromptSubmit</code>, który przy każdym poleceniu dokleja dwie, trzy pasujące notatki. Warunkowanie to rejestr niestabilnych testów („ten bywa czerwony przez timeout bazy, uruchom raz ponownie”). Habituacja to filtr powtarzalnych ostrzeżeń.</p>
+  <p>Habituacja ma jednak biologiczną pułapkę. Możesz przegapić sygnał, który właśnie zmienił znaczenie. Dlatego każde „ignoruj” powinno mieć datę ważności.</p>
+</section>
+
+<section class="liber" id="przyszlosc">
+  <div class="liber-glowa">
+    <svg class="ry" viewBox="0 0 120 120" aria-hidden="true">
+      <circle class="z" cx="60" cy="60" r="54"/><circle class="cz" cx="60" cy="60" r="49"/>
+      <path class="cz" d="M24 40h72M24 60h72M24 80h72M40 24v72M60 24v72M80 24v72"/>
+      <path class="z gr" d="M40 40l2 4M80 80l2 4"/><circle class="lf" cx="62" cy="58" r="4"/><circle class="l" cx="62" cy="58" r="9"/>
+      <path class="z kr" d="M40 40l22 18"/>
+    </svg>
+    <div>
+      <p class="brew">Liber III · Mapa i jutro</p>
+      <h2>Pamięć skierowana w przyszłość i w przestrzeń</h2>
+      <p class="lat">O zamiarach, które giną przy pierwszej przerwie, i o ptaku, który szuka kryjówki względem patyków.</p>
+    </div>
+  </div>
+
+  <h3 id="s8"><span class="par">§ 8</span>Biblioteka po drodze</h3>
+  <p class="lead">Masz w torbie przetrzymaną książkę. Nie myślisz o niej cały dzień. Przypomina ci się dopiero, gdy mijasz bibliotekę. To pamięć prospektywna, pamięć o tym, co masz zrobić. Wersja oparta na zdarzeniu działa dobrze. Wersja oparta na godzinie działa gorzej, bo wewnętrzny zegar zawodzi.</p>
+  <p>Jej największym wrogiem jest przerwa. W jednym z badań tylko dwóch na stu przerwanych uczestników myślało w czasie przerwy o swoim zamiarze. Dla agenta przerwą jest koniec sesji albo kompaktowanie.</p>
+  <p>I tu jest niespodzianka. Opracowanie, na którym stoi ta opowieść, nie znalazło w literaturze ani jednego systemu agentowego, który oceniałby pamięć prospektywną jako osobny rodzaj pamięci. A Claude Code ma do niej gotowy mechanizm, choć nikt go tak nie nazywa. Reguła z polem <code class="kod">paths</code> ładuje się dokładnie wtedy, gdy Claude dotyka pasującego pliku. Ścieżka jest biblioteką po drodze.</p>
+  <div class="propozycja"><span class="et">Pomysł</span><p>Zamiary zapisuj jako pary „gdy dotkniesz X, zrób Y” w regule z zakresem ścieżek, z datą i źródłem, a po wykonaniu usuń regułę w tym samym commicie. Zamiary oparte na czasie oddaj kalendarzowi, timerowi systemd albo hookowi startowemu, który wypisze to, co ma termin na dziś.</p></div>
+
+  <h3 id="s9"><span class="par">§ 9</span>Przesunięte patyki</h3>
+  <p>Orzechówka chowa na zimę ponad trzydzieści tysięcy nasion i odnajduje je nawet po dziewięciu miesiącach. Badacze przesunęli punkty orientacyjne o mniej więcej dwadzieścia centymetrów. Ptak kopał z dokładnie takim samym przesunięciem. Nie pamięta miejsca na świecie. Pamięta miejsce względem patyków.</p>
+  <p>Auto memory w Claude Code jest zbudowane jak gospodarstwo orzechówki. Indeks <code class="kod">MEMORY.md</code> to mapa kryjówek, pliki tematyczne to same nasiona. Na starcie wczytuje się tylko pierwsze dwieście linii albo dwadzieścia pięć kilobajtów indeksu. Treść za tą granicą nie jest „słabiej pamiętana”. W ogóle się nie wczytuje.</p>
+  <p>Łosoś wraca do rodzinnej rzeki kaskadą: przez ocean prowadzi go magnetyczny odcisk ujścia, ostatni odcinek węch. Agent może szukać tak samo. Najpierw moduł, potem grep w module.</p>
+  <div class="propozycja"><span class="et">Pomysł</span><p>Linie indeksu pisz jak etykiety kryjówek, najważniejsze na górze, bo góra przetrwa każde przycięcie. Każdy fakt przypnij do kotwicy „ścieżka i symbol”. Po refaktorze, który przesuwa patyki, sprawdź grepem, czy kotwice jeszcze istnieją, a osierocone wpisy oznacz jako nieświeże. CLAUDE.md w katalogu modułu to wspomnienie przypięte do miejsca, jak w metodzie loci.</p></div>
+</section>
+
+<section class="liber" id="noc">
+  <div class="liber-glowa">
+    <svg class="ry" viewBox="0 0 120 120" aria-hidden="true">
+      <circle class="z" cx="60" cy="60" r="54"/><circle class="cz" cx="60" cy="60" r="49"/>
+      <path d="M70 30a30 30 0 1 0 20 50 24 24 0 0 1-20-50z"/><circle class="zf" cx="36" cy="38" r="2"/><circle class="zf" cx="44" cy="80" r="1.6"/><circle class="zf" cx="30" cy="62" r="1.4"/>
+      <path class="z" d="M44 96h32"/>
+    </svg>
+    <div>
+      <p class="brew">Liber IV · Noc</p>
+      <h2>Co się dzieje między sesjami</h2>
+      <p class="lat">O śnie, który przegląda dzień, o wspomnieniu otwartym do edycji, o zapominaniu jako filtrze i o sójce, na którą ktoś patrzył.</p>
+    </div>
+  </div>
+
+  <h3 id="s10"><span class="par">§ 10</span>Sen, który przegląda dzień</h3>
+  <p class="lead">Zasypiasz. Hipokamp odtwarza dzisiejsze ślady w tej samej kolejności, w jakiej się wydarzyły, i przeplata je ze starą wiedzą w korze. Szybki uczeń przekazuje notatki powolnemu. Gdyby wpisywał nowości wprost, rozbiłby to, co już jest. Badacze nazywają to katastrofalną interferencją.</p>
+  <p>Sen jest wybiórczy. W jednym z badań zysk ze snu mieli tylko ci, którym zapowiedziano test. W innym sen prawie trzykrotnie zwiększał szansę odkrycia ukrytej reguły. Ale sen dokłada też fałszywe wspomnienia „istoty”: pamiętasz sens, którego nikt nie powiedział.</p>
+  <p>Claude Code ma dziś pierwsze elementy snu. Przypomina o skracaniu indeksu, a polecenie <code class="kod">/doctor prompt-audit</code> szuka sprzeczności i rzeczy przestarzałych. Brakuje mu replayu: regularnego przejścia przez świeże epizody z jednym pytaniem, co z tego jest wiedzą, a co tylko się wydarzyło.</p>
+  <div class="propozycja"><span class="et">Pomysł</span><p>Dwie prędkości pamięci. W dzień szybki dziennik epizodów, tylko dopisywany. W nocy timer uruchamia skill konsolidacji na osobnej gałęzi: przegląda epizody, dla każdego kandydata wybiera dodaj, zaktualizuj, unieważnij albo nic, i zostawia rano różnicę do akceptacji. Wynik snu jest propozycją, a nie zapisem, bo sen produkuje też fałszywą istotę. Uczciwie: badanie obliczeń w czasie snu dało przy kodzie oszczędność umiarkowaną, a przy dużych budżetach zwykłe liczenie wypadało lepiej. Powodem nocnego joba jest higiena pamięci, nie tańsze tokeny.</p></div>
+
+  <h3 id="s11"><span class="par">§ 11</span>Wspomnienie otwarte do edycji</h3>
+  <p>W 2000 roku Karim Nader pokazał, że przywołane wspomnienie na chwilę traci stabilność. Lek podany zaraz po przypomnieniu je wymazywał. Sześć godzin później już nie. Elizabeth Loftus pokazała drugą stronę: informacja podana po zdarzeniu zanieczyszcza wspomnienie, a w badaniach w rodzaju „zgubiłeś się w centrum handlowym” mniej więcej trzecia część osób wytworzyła częściowo albo całkiem fałszywe wspomnienie.</p>
+  <p>Notatka, którą model może poprawić przy każdym odczycie, dryfuje jak historia opowiadana po raz dwudziesty. Streszczenie streszczenia potrafi po cichu zgubić rzadką, ale krytyczną instrukcję.</p>
+  <div class="propozycja"><span class="et">Pomysł</span><p>Wpis semantyczny wolno poprawić tylko wtedy, gdy w tej sesji ktoś sprawdził go w kodzie albo testem. Surowe epizody są nietykalne, a hook może zablokować ich edycję. Katalog pamięci trzymaj w gicie, wtedy <code class="kod">git diff</code> pokaże rekonsolidację czarno na białym.</p></div>
+
+  <h3 id="s12"><span class="par">§ 12</span>Matrona i muszka</h3>
+  <p>Muszka owocowa zapomina aktywnie. Ta sama dopamina, która tworzy ślad, potrafi go wymazać. Gdy ją zablokować, pamięć sprzed trzech godzin trwa mniej więcej dwa razy dłużej. Zapominanie działa jak filtr.</p>
+  <p>Teraz posłuchaj o słoniach. W 1993 roku przez park w Tanzanii przeszła susza. Lepiej przetrwały stada prowadzone przez stare matrony. Ich zachowanie przypisuje się pamięci suszy sprzed ponad trzydziestu lat. Z szesnastu zmarłych cieląt dziesięć należało do stada z najmłodszą przewodniczką, które zostało w parku.</p>
+  <p>Pamięć plikowa nie blaknie wcale. Jest za to twardo ucinana na granicy limitu. Brakuje jej środka między wiecznością a nicością.</p>
+  <div class="propozycja"><span class="et">Pomysł</span><p>Domyślnie wpisy wygasają, zostają te z dowodem ważności: użycie, potwierdzenie, oznaczenie przez człowieka. „Zapomniane” znaczy przeniesione do archiwum, nie skasowane. Wyjątek to pamięć matrony: opisy rzadkich awarii nie wygasają nigdy, bo ich wartość nie zależy od świeżości.</p></div>
+
+  <h3 id="s13"><span class="par">§ 13</span>Ktoś patrzył</h3>
+  <p>Wróćmy do sójki. Kiedy chowa jedzenie, a obok siedzi inna sójka, później wraca i przenosi schowek. Robi to tylko wtedy, gdy ktoś patrzył, i tylko jeśli sama kiedyś kradła. Pamięta nawet, który osobnik ją obserwował. Ten ptak prowadzi księgę źródeł.</p>
+  <p>Agent też potrzebuje takiej księgi. Wpis, który przyszedł z treści zewnętrznej, czyli ze strony WWW, z opisu zgłoszenia albo z README zależności, jest schowkiem, na który ktoś patrzył. W badaniu MINJA złośliwe rekordy dało się wstrzyknąć do pamięci agenta samymi zapytaniami, w 98,2% prób.</p>
+  <div class="propozycja"><span class="et">Pomysł</span><p>Każdy wpis wie, skąd pochodzi, kiedy powstał i jak bardzo jest pewny. Kolejność zaufania: człowiek, potem agent, na końcu narzędzie. To, co przyszło z narzędzia, czeka w kwarantannie i nigdy nie trafia wprost do CLAUDE.md, reguł ani skilli. Gdy pamięć milczy, agent mówi „nie wiem” i sprawdza w kodzie zamiast zgadywać.</p></div>
+</section>
+
+<section class="liber" id="kolonia">
+  <div class="liber-glowa">
+    <svg class="ry" viewBox="0 0 120 120" aria-hidden="true">
+      <circle class="z" cx="60" cy="60" r="54"/><circle class="cz" cx="60" cy="60" r="49"/>
+      <path class="z kr" d="M24 84C40 70 52 76 62 60s20-26 34-30"/>
+      <circle class="af" cx="32" cy="78" r="3"/><circle class="af" cx="50" cy="70" r="3"/><circle class="af" cx="66" cy="54" r="3"/><circle class="af" cx="84" cy="36" r="3"/>
+      <path d="M86 26h14v12H86z"/><path class="z" d="M44 96h32"/>
+    </svg>
+    <div>
+      <p class="brew">Liber V · Kolonia</p>
+      <h2>Pamięć, której nie ma żaden agent</h2>
+      <p class="lat">O mrówkach, które żyją rok, i kolonii, która żyje trzydzieści lat, o tym, gdzie te analogie kłamią, i o tym, co zrobić jutro rano.</p>
+    </div>
+  </div>
+
+  <h3 id="s14"><span class="par">§ 14</span>Mrówka nie pamięta</h3>
+  <p class="lead">Kolonia mrówek żniwiarek żyje dwadzieścia, trzydzieści lat. Robotnica najwyżej rok. Kolonia pamięta przez ślady, które mrówki zostawiają w środowisku. To stygmergia: koordynacja przez wspólne otoczenie zamiast przez rozmowę.</p>
+  <p>Twoi subagenci są jak robotnice. Żyją krótko, a repozytorium jest kolonią. Jest jednak haczyk. Gdy każdy subagent pracuje we własnym worktree, plik statusu w repozytorium istnieje w tylu kopiach, ilu jest agentów. Siedmiu agentów widzi siedem różnych prawd. A katalog auto memory jest dla wszystkich worktree jednego repozytorium wspólny, więc mogą do niego trafić sprzeczne wpisy.</p>
+  <p>Mrówki nie edytują cudzego feromonu. Każda zostawia własny. Pszczoła, która obejrzała dużo tańca, leci tam, gdzie wskazał taniec. Ta, która obejrzała mało, leci tam, gdzie była wcześniej. Przekaz od innych waży się z własną wiedzą.</p>
+  <div class="propozycja"><span class="et">Pomysł</span><p>Status trzymaj poza drzewami roboczymi, na przykład we wspólnym katalogu <code class="kod">.git</code> wszystkich worktree. Każdy agent pisze tylko swój plik, a skrypt składa z nich widok do czytania. Hook <code class="kod">SubagentStop</code> nie pozwala agentowi skończyć, dopóki nie zostawi śladu. Wpis, którego nikt nie odświeżył od doby, paruje jak feromon i dostaje znacznik nieświeżego.</p></div>
+  <p>Na koniec Otto. W eksperymencie myślowym Clarka i Chalmersa Otto choruje na Alzheimera i nosi notes. Notes jest częścią jego pamięci, jeśli jest zawsze pod ręką, a jego treść przyjmowana bez wahania. Pliki agenta nie są zapasem. Są jego właściwą pamięcią długotrwałą. To zdanie jest zarazem wymaganiem i ostrzeżeniem, bo „bez wahania” znaczy też „bez sprawdzania”.</p>
+
+  <h3 id="s15"><span class="par">§ 15</span>Gdzie te analogie kłamią</h3>
+  <p>Do tej pory opowieść była dla analogii bardzo życzliwa. Teraz uczciwość.</p>
+  <div class="umbra"><span class="et">Zastrzeżenia</span><ul>
+    <li><strong>W Claude Code to wszystko leży na jednym blacie.</strong> U człowieka szuflady mieszkają w różnych strukturach mózgu, dlatego H.M. stracił jedną, a zachował drugą. CLAUDE.md, auto memory i reguły trafiają do tego samego okna kontekstu, konkurują o miejsce, a sprzeczności model rozstrzyga arbitralnie. Prawdziwie osobny system mają tylko hooki.</li>
+    <li><strong>„Epizodyczna” to dla modelu metafora.</strong> Notatka z datą ma „kiedy”, ale nie ma żadnego „ja”. Badacze sójek dopisali do nazwy „-podobna”. Warto robić tak samo.</li>
+    <li><strong>Mózg pamięci nie projektował, tylko ją odziedziczył.</strong> Pamięć agenta ktoś zaprojektował i może ją zmienić w następnej wersji. Limity i zachowania, które tu cytuję, pochodzą z dokumentacji z października 2026. Sprawdź je przed wdrożeniem.</li>
+    <li><strong>Biologia sama się kłóci.</strong> Teorie konsolidacji wciąż się spierają, a wyniki o pamięci epizodopodobnej u naczelnych są mieszane. Kto mówi „zróbmy pamięć jak mózg”, niech najpierw powie, którą teorię mózgu ma na myśli.</li>
+    <li><strong>Liczby z benchmarków pamięci podają dostawcy.</strong> Wyniki Mem0, Zepa i Letty są wzajemnie kwestionowane i żaden nie był mierzony na zadaniach programistycznych.</li>
+  </ul></div>
+  <p>Trzeba też oddać sprawiedliwość. Rozdział na pamięć pisaną przez człowieka i pamięć pisaną przez model to dobra decyzja. Ładowanie kontekstu po dotknięciu pliku to sprytne torowanie. Indeks z plikami na żądanie to dobrze skopiowana orzechówka. A najbardziej dojrzałe jest to, że dokumentacja przyznaje: pamięć tekstowa nie gwarantuje posłuszeństwa, i wskazuje mechanizm, który je gwarantuje.</p>
+
+  <div class="tabwrap" data-narration="Ściąga: dla każdego rodzaju pamięci co robi w naturze, co w Claude Code już istnieje i jaka jest propozycja. Sensoryczna: sito, wyniki narzędzi, zasada nic surowego do pamięci. Robocza: stół na cztery rzeczy, okno kontekstu, stan zadania w pliku. Epizodyczna: co gdzie kiedy, auto memory z datą zapisu, termin przydatności. Semantyczna: wiedza bez kontekstu, CLAUDE.md, unieważnianie zamiast kasowania. Proceduralna: umiejętność bez wspomnienia, skille i hooki, zasady drogie w złamaniu jako hooki. Prospektywna: pamięć zamiarów, reguły ze ścieżkami, zamiary gdy dotkniesz X zrób Y. Przestrzenna: mapa kryjówek, indeks MEMORY.md, kotwice ścieżka i symbol. Konsolidacja: sen, audyt instrukcji, nocny sen na gałęzi. Zapominanie: filtr, twarde ucięcie indeksu, archiwum i pamięć matrony. Metapamięć: źródło wspomnienia, brak, proweniencja i kwarantanna. Zbiorowa: stygmergia, subagenci i worktree, status poza drzewem roboczym.">
+  <table>
+    <caption>Ściąga · rodzaj pamięci i jego przekład</caption>
+    <thead><tr><th></th><th>Pamięć</th><th>W naturze</th><th>Claude Code dziś</th><th>Propozycja</th></tr></thead>
+    <tbody>
+      <tr><td class="ico"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><path d="M10 22h44L38 40v12l-12 4V40z"/><path class="cz" d="M18 28h28"/><circle class="zf" cx="20" cy="12" r="2"/><circle class="zf" cx="32" cy="9" r="2"/><circle class="zf" cx="44" cy="13" r="2"/></svg></td><td class="nm">Sensoryczna</td><td class="w">sito, ślad gaśnie w sekundę</td><td>wyniki narzędzi, czyszczone przy kompaktowaniu</td><td>nic surowego do pamięci</td></tr>
+      <tr><td class="ico"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 30h48M14 30v22M50 30v22"/><rect class="tlo" x="12" y="16" width="8" height="12"/><rect class="tlo" x="23" y="18" width="8" height="10"/><rect class="tlo" x="34" y="14" width="8" height="14"/><rect class="tlo" x="45" y="19" width="7" height="9"/></svg></td><td class="nm">Robocza</td><td class="w">stół na ok. 4 rzeczy</td><td>okno kontekstu</td><td>stan zadania w pliku, tabu-lista, subagenci jako paczki</td></tr>
+      <tr><td class="ico"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><path d="M20 10h24M20 54h24"/><path d="M23 10c0 13 18 13 18 22S23 41 23 54M41 10c0 13-18 13-18 22s18 9 18 22"/><path class="zf" d="M26 51h12l-6-6z"/></svg></td><td class="nm">Epizodopodobna</td><td class="w">sójka: co, gdzie, kiedy</td><td>auto memory z czasem zapisu</td><td>termin przydatności, dziennik porażek</td></tr>
+      <tr><td class="ico"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 18c-6-4-14-4-20-2v32c6-2 14-2 20 2 6-4 14-4 20-2V16c-6-2-14-2-20 2z"/><path class="z" d="M32 18v32"/></svg></td><td class="nm">Semantyczna</td><td class="w">wiedza bez kontekstu nabycia</td><td>CLAUDE.md, reguły</td><td>„dlaczego”, unieważnianie zamiast kasowania</td></tr>
+      <tr><td class="ico"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><path d="M14 54V26a18 18 0 0 1 36 0v28"/><path class="cz" d="M23 54V28M41 54V28"/><path d="M8 54h48"/><rect class="tlo" x="26" y="34" width="12" height="10"/><path class="z" d="M28.5 34v-3a3.5 3.5 0 0 1 7 0v3"/></svg></td><td class="nm">Proceduralna</td><td class="w">ręka H.M.</td><td>skille, hooki</td><td>zasady drogie w złamaniu jako hooki</td></tr>
+      <tr><td class="ico"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><path d="M14 52l22-22"/><path class="lf" d="M38 30c-5-4-2-10 2-14 1 5 7 6 4 12-1 2-4 3-6 2z"/><path class="z" d="M50 16l4-4M52 26h6M42 9V4"/></svg></td><td class="nm">Odruchy</td><td class="w">torowanie, warunkowanie, habituacja</td><td>hooki na każde polecenie</td><td>mało kontekstu, „ignoruj” z datą ważności</td></tr>
+      <tr><td class="ico"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 50l14-6 18 6 16-6V12l-16 6-18-6-14 6z"/><path class="cz" d="M22 12v32M40 18v32"/><path class="l" d="M32 32c-5-7-8-10-8-14a8 8 0 0 1 16 0c0 4-3 7-8 14z"/><circle class="lf" cx="32" cy="18" r="2.4"/></svg></td><td class="nm">Prospektywna</td><td class="w">biblioteka po drodze</td><td>reguły z <code class="kod">paths</code></td><td>„gdy dotkniesz X, zrób Y”</td></tr>
+      <tr><td class="ico"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><path class="cz" d="M8 22h48M8 42h48M22 8v48M42 8v48"/><circle class="lf" cx="33" cy="31" r="3"/><circle class="l" cx="33" cy="31" r="7"/><path class="z kr" d="M22 22l11 9"/></svg></td><td class="nm">Przestrzenna</td><td class="w">orzechówka i patyki</td><td>indeks <code class="kod">MEMORY.md</code>, 200 linii</td><td>kotwice „ścieżka i symbol”, ważne na górze</td></tr>
+      <tr><td class="ico"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><path d="M38 10a20 20 0 1 0 16 32A16 16 0 0 1 38 10z"/><circle class="zf" cx="14" cy="14" r="1.8"/><circle class="zf" cx="54" cy="12" r="1.4"/></svg></td><td class="nm">Konsolidacja</td><td class="w">sen przeplata nowe ze starym</td><td><code class="kod">/doctor prompt-audit</code></td><td>nocny sen na gałęzi, wynik do akceptacji</td></tr>
+      <tr><td class="ico"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><path d="M48 24a17 17 0 0 0-30-4"/><path d="M17 12v8h8"/><path class="z" d="M16 40a17 17 0 0 0 30 4"/><path class="z" d="M47 52v-8h-8"/></svg></td><td class="nm">Rekonsolidacja</td><td class="w">przypomnienie otwiera ślad</td><td>pliki markdown</td><td>edycja tylko po sprawdzeniu, epizody nietykalne, git</td></tr>
+      <tr><td class="ico"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><rect x="10" y="12" width="44" height="10"/><path d="M14 22v30h36V22"/><path class="z" d="M26 30h12"/></svg></td><td class="nm">Zapominanie</td><td class="w">muszka, słonie</td><td>twarde ucięcie indeksu</td><td>archiwum, pamięć matrony bez wygaszania</td></tr>
+      <tr><td class="ico"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><path d="M6 32c8-12 18-18 26-18s18 6 26 18c-8 12-18 18-26 18S14 44 6 32z"/><circle cx="32" cy="32" r="8"/><circle class="af" cx="32" cy="32" r="3"/></svg></td><td class="nm">Metapamięć</td><td class="w">sójka, na którą patrzono</td><td>brak</td><td>źródło i pewność przy każdym wpisie, kwarantanna</td></tr>
+      <tr><td class="ico"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><path class="z kr" d="M8 52C20 40 28 46 36 34s12-18 20-22"/><circle class="af" cx="14" cy="47" r="2.6"/><circle class="af" cx="29" cy="42" r="2.6"/><circle class="af" cx="43" cy="24" r="2.6"/></svg></td><td class="nm">Zbiorowa</td><td class="w">kolonia mrówek</td><td>subagenci, worktree</td><td>status poza drzewem, plik na agenta, parowanie</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3 id="s16"><span class="par">§ 16</span>Jutro rano</h3>
+  <p>Kolejność ma znaczenie. Pierwsze kroki usuwają prawdziwe awarie, dalsze budują warstwy, a sen ma sens dopiero wtedy, gdy jest z czego śnić.</p>
+  <ol class="ogledziny">
+    <li><strong>Sprawdź, co naprawdę się wczytuje.</strong> Uruchom <code class="kod">/context</code> i przejrzyj listę plików pamięci. Pamięć, która się nie ładuje, nie istnieje.<span class="kotwica">najtańsza diagnoza</span></li>
+    <li><strong>Przenieś bramki z prozy do hooków.</strong> Zakaz pusha bez akceptacji to blokada w <code class="kod">PreToolUse</code>, a nie zdanie w CLAUDE.md.<span class="kotwica">ręka zamiast głowy</span></li>
+    <li><strong>Zmierz blat.</strong> Główny CLAUDE.md poniżej dwustu linii. Wiedza o jednym zakątku do reguł z <code class="kod">paths</code>, przepisy do skilli.<span class="kotwica">pamięć robocza</span></li>
+    <li><strong>Stan zadania do pliku, który przetrwa kompaktowanie.</strong> Hook startowy wstrzykuje go z powrotem razem z tabu-listą.<span class="kotwica">stół i labirynt</span></li>
+    <li><strong>Zapisz pierwszy zamiar przy ścieżce.</strong> „Gdy dotkniesz X, zrób Y” w regule z zakresem.<span class="kotwica">biblioteka po drodze</span></li>
+    <li><strong>Zaplanuj sen.</strong> Piętnaście minut tygodniowo w kalendarzu: awans powtarzających się poprawek, porządki w indeksie, audyt instrukcji. Kalendarz, bo zamiary oparte na czasie lepiej trzymać poza agentem.<span class="kotwica">konsolidacja</span></li>
+  </ol>
+</section>
+
+<section class="liber" id="swieze">
+  <div class="liber-glowa">
+    <svg class="ry" viewBox="0 0 120 120" aria-hidden="true">
+      <circle class="z" cx="60" cy="60" r="54"/><circle class="cz" cx="60" cy="60" r="49"/>
+      <path d="M22 60c10-16 24-24 38-24s28 8 38 24c-10 16-24 24-38 24S32 76 22 60z"/><circle cx="60" cy="60" r="12"/><circle class="af" cx="60" cy="60" r="5"/>
+      <path class="z" d="M60 18v8M34 26l5 6M86 26l-5 6"/>
+    </svg>
+    <div>
+      <p class="brew">Liber VI · Świeże oko</p>
+      <h2>Pomysły, których nie ma w przeglądach</h2>
+      <p class="lat">Sześć mechanizmów wymyślonych przez osobnego agenta, który dostał opracowanie, ale nie widział tej opowieści.</p>
+    </div>
+  </div>
+
+  <p class="lead">Do tej pory opowieść szła po śladach przeglądów i badań. Na koniec dostał głos ktoś, kto tej opowieści nie słyszał. Osobny agent dostał tylko opracowanie, listę pomysłów, których ma nie powtarzać, i jedną prośbę: wymyśl sześć mechanizmów z różnych dziedzin, których tam nie ma, i nie zmyślaj faktów.</p><p>Najpierw odrzucił trzy pomysły, które przyszły mu do głowy jako pierwsze, bo były typowe: wektorową bazę epizodów, powtórki rozłożone w czasie i graf wiedzy. Odrzucił też czwarty, bo za mało różnił się od kotwic. Zostało sześć. Każdy ma etykietę: wszystkie da się zbudować dziś, żadnego jeszcze nie sprawdzono w praktyce.</p><div class="ikony"><figure class="ik"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><path d="M10 12h44v28H30l-10 10V40H10z"/><path d="M28 20a4.5 4.5 0 1 1 6.5 4c-1.5 1-2.5 2-2.5 4"/><circle class="af" cx="32" cy="33" r="1.8"/></svg><figcaption><b>Przesłuchanie świadka</b>da się dziś</figcaption></figure><figure class="ik"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 8l20 8v14c0 12-8 20-20 26C20 50 12 42 12 30V16z"/><path class="l" d="M25 25l14 14M39 25L25 39"/></svg><figcaption><b>Grasica dla reguł</b>da się dziś</figcaption></figure><figure class="ik"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="22"/><circle class="cz" cx="32" cy="32" r="14"/><circle class="z" cx="32" cy="32" r="6"/><path class="l" d="M52 12L36 28"/><path class="l" d="M45 11l7 1 1 7"/></svg><figcaption><b>Zakład przed testem</b>da się dziś</figcaption></figure><figure class="ik"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><rect class="cz" x="8" y="8" width="48" height="48"/><path class="cz" d="M8 32h48M32 8v48"/><path class="z gr kr" d="M10 54C22 40 36 30 54 10"/></svg><figcaption><b>Ścieżki wydeptane</b>da się dziś</figcaption></figure><figure class="ik"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><path d="M6 34h52"/><path class="cz" d="M6 42h52M6 50h52"/><circle class="af" cx="14" cy="46" r="2"/><circle class="af" cx="46" cy="54" r="2"/><circle class="af" cx="30" cy="38" r="2.4"/><path class="g" d="M30 36V18"/><path class="g" d="M30 26c-8 0-10-6-10-10 6 0 10 4 10 10zM30 22c6 0 10-4 10-9-6 0-10 3-10 9z"/></svg><figcaption><b>Glebowy bank nasion</b>da się dziś</figcaption></figure><figure class="ik"><svg class="ry" viewBox="0 0 64 64" aria-hidden="true"><rect x="8" y="14" width="48" height="36"/><path class="cz" d="M8 32h48M30 14v18M20 32v18M42 32v18"/><path class="z gr" d="M14 18l4 8 4-8M18 26v4"/></svg><figcaption><b>Znaki kamieniarskie</b>da się dziś</figcaption></figure></div><div class="propozycja"><span class="et">Pomysł 1 · da się dziś</span><h4>Przesłuchanie świadka</h4><p><strong>Obraz.</strong> Psychologia społeczna zna pamięć transakcyjną (Daniel Wegner, lata osiemdziesiąte): pary i zespoły nie pamiętają wszystkiego, tylko kto co wie, i pytają tę osobę. Analogia trzyma się, bo stara sesja to dosłownie „ktoś”, kto wiedział więcej, niż zmieściło się w jego streszczeniu.</p><p><strong>Mechanizm.</strong> <code class="kod">SessionEnd</code> dopisuje do <code class="kod">who-knows.tsv</code> temat, ścieżki i identyfikator sesji. Skill „zapytaj świadka” wznawia tamtą sesję jako odgałęzienie (<code class="kod">claude -p --resume &lt;id&gt; --fork-session</code>), bez narzędzi, z jednym pytaniem: co ustaliłeś o X i dlaczego. Oryginał zostaje nietknięty, odpowiedź wraca jako jedna paczka.</p><p><strong>Co daje.</strong> Pamięta się adres wiedzy, a nie stratne streszczenie, więc da się odpowiedzieć także na pytanie, którego nikt nie przewidział przy zapisie.</p><p class="przew"><strong>Gdzie może zawieść.</strong> Sprzątanie transkryptów kasuje świadków, wznowienie długiej sesji jest drogie, a świadek mówi o kodzie z tamtego dnia.</p></div><div class="propozycja"><span class="et">Pomysł 2 · da się dziś</span><h4>Grasica dla reguł</h4><p><strong>Obraz.</strong> W grasicy limfocyty, które mocno reagują na własne tkanki organizmu, są eliminowane, zanim trafią do krwi. Gdy ta selekcja zawodzi, pojawia się autoagresja. Reguła pamięci, która uderza w zdrową, udaną pracę, jest właśnie taką autoagresją.</p><p><strong>Mechanizm.</strong> Kandydat na hook albo lekcję w postaci wzorca przechodzi próbę na historii, zanim trafi do <code class="kod">settings.json</code>. Skrypt wyciąga z transkryptów dawne wywołania narzędzi i liczy, ile razy nowa reguła zablokowałaby coś w sesjach zakończonych sukcesem. Powyżej progu kandydat odpada.</p><p><strong>Co daje.</strong> Nowa pamięć proceduralna ma zmierzony odsetek fałszywych alarmów, zanim zacznie przeszkadzać.</p><p class="przew"><strong>Gdzie może zawieść.</strong> Jeśli „swoje” obejmuje chroniczny zły nawyk, próba odrzuci właśnie regułę, która miała go wyplenić. Reguł pisanych prozą nie da się tak sprawdzić tanio.</p></div><div class="propozycja"><span class="et">Pomysł 3 · da się dziś</span><h4>Zakład przed testem</h4><p><strong>Obraz.</strong> Neurony dopaminowe reagują silnie na nagrodę nieoczekiwaną, a słabo na przewidzianą. W modelach uczenia, takich jak model Rescorli i Wagnera, przyrost wiedzy rośnie z błędem przewidywania. Pamiętać warto zaskoczenie, nie zdarzenie.</p><p><strong>Mechanizm.</strong> Hook przed uruchomieniem testów, buildu albo migracji odrzuca wywołanie, jeśli w opisie polecenia nie ma zakładu: oczekuję zielonego albo czerwonego. Hook po wywołaniu porównuje zakład z wynikiem. Rozbieżność trafia do skrzynki kandydatów z wysoką ważnością, zgodność nie zostawia śladu.</p><p><strong>Co daje.</strong> Wpisy wybiera mierzalne zaskoczenie, a nie deklarowana ważność, a przy okazji powstaje dziennik kalibracji agenta.</p><p class="przew"><strong>Gdzie może zawieść.</strong> Agent może zacząć typować asekuracyjnie. Agent nie sprawdził też, czy wynik narzędzia niesie kod wyjścia; może trzeba go rozpoznawać po treści.</p></div><div class="propozycja"><span class="et">Pomysł 4 · da się dziś</span><h4>Ścieżki wydeptane</h4><p><strong>Obraz.</strong> Przechodnie wydeptują w trawie skróty, których projektant nie przewidział. Agent słyszał o projektantach, którzy brukują dopiero to, co wydeptano, ale sam przyznaje, że zna to jako anegdotę, nie udokumentowaną praktykę. Ślad zachowania jest uczciwszą mapą niż mapa deklarowana.</p><p><strong>Mechanizm.</strong> Hook po każdym czytaniu i edycji dopisuje parę: sesja i ścieżka. Nocny skrypt szuka plików, które w wielu udanych sesjach odwiedzano razem, i proponuje regułę z <code class="kod">paths</code> („czytając A, zwykle potrzebujesz B i C”) albo poprawkę mapy repozytorium.</p><p><strong>Co daje.</strong> Mapa rośnie oddolnie z tego, jak agent naprawdę chodzi po kodzie, bez niczyjego pisania.</p><p class="przew"><strong>Gdzie może zawieść.</strong> Zabrukuje też błądzenie. Ścieżka wydeptana przez zagubienie wygląda jak użyteczna, jeśli nie odfiltrować jej wynikiem sesji.</p></div><div class="propozycja"><span class="et">Pomysł 5 · da się dziś</span><h4>Glebowy bank nasion</h4><p><strong>Obraz.</strong> Nasiona potrafią latami leżeć w glebie w uśpieniu i kiełkują po zaburzeniu: pożarze, orce, odsłonięciu na światło. Opracowanie ma archiwum, ale nie mówi, co je budzi. Tu budzi je objaw, a nie ścieżka ani data.</p><p><strong>Mechanizm.</strong> Gdy sen archiwizuje epizod, wyciąga z niego sygnatury błędów: linie komunikatów z liczbami, skrótami i ścieżkami zamienionymi na symbole. Hook po każdym poleceniu normalizuje bieżący komunikat tak samo. Przy trafieniu dokleja krótki wskaźnik: ten błąd był w epizodzie X, rozwiązanie Y.</p><p><strong>Co daje.</strong> Zapominanie przestaje być ryzykowne, bo zapomniany przypadek wraca dokładnie wtedy, gdy powtarza się jego objaw. To trzeci rodzaj wskazówki, obok ścieżki i czasu.</p><p class="przew"><strong>Gdzie może zawieść.</strong> Zbyt zgrubna normalizacja budzi fałszywe nasiona, zbyt dokładna nie trafia nigdy, a komunikaty zmieniają się z wersją biblioteki.</p></div><div class="propozycja"><span class="et">Pomysł 6 · da się dziś</span><h4>Znaki kamieniarskie</h4><p><strong>Obraz.</strong> Średniowieczni kamieniarze ryli znaki na obrobionych blokach. Zwykle tłumaczy się to rozliczaniem pracy, choć interpretacje są różne. Pewne jest jedno: informacja siedziała w kamieniu, nie w osobnym rejestrze, więc szła razem z blokiem.</p><p><strong>Mechanizm.</strong> Commity dostają dopiski <code class="kod">Why:</code>, <code class="kod">Gotcha:</code> i <code class="kod">Rejected:</code>. Przy czytaniu albo przed edycją fragmentu hook uruchamia <code class="kod">git blame</code> na tych liniach, zbiera dopiski tylko z commitów, które ich dotknęły, i dokleja najwyżej kilka.</p><p><strong>Co daje.</strong> Pamięć przypięta do linii idzie za kodem przy refaktorze. Słabość kotwic „ścieżka i symbol”, o której była mowa przy orzechówce, znika bez nowego magazynu.</p><p class="przew"><strong>Gdzie może zawieść.</strong> Scalanie ze ściśnięciem commitów może zgubić albo skleić dopiski, a przepisanie pliku od zera zrywa ciąg blame.</p></div><blockquote class="wyrwa">Gdyby miał zacząć od jednego, wybrałby znaki kamieniarskie: korzystają z gita, który już jest, nie dokładają magazynu i usuwają ryzyko przesuniętych patyków.</blockquote>
+</section>
+
+<section class="liber" id="koda">
+  <p class="brew">Koda</p>
+  <p>H.M. przez pół wieku pomagał nauce, choć nie pamiętał żadnego z tysięcy badań, w których brał udział. Jego ręka pamiętała jednak gwiazdę. Twój agent jest w podobnej sytuacji, tylko ma jedną przewagę: ktoś może mu napisać notatkę.</p>
+  <p>Pisz ją z ostrożnością sójki, która wie, kiedy larwa się psuje i kto patrzył. Układaj ją jak orzechówka, względem patyków, najważniejsze na górze. A gdy nie wiesz, co z niej wyrzucić, pomyśl o starej słonicy, która pamięta suszę sprzed trzydziestu lat, i o muszce, która zapomina, żeby móc się uczyć.</p>
+  <blockquote class="wyrwa">Najlepsza pamięć też umie zapominać. Ale wie, czego nie wolno.</blockquote>
+  <p>Dalej: <a href="../moimi-slowami/">„Moimi słowami”</a>, opowieść o tym, jak tę samą metodę przyłożyć do własnego głosu.</p>
+</section>
+
+<section class="bib" id="zrodla">
+  <p class="brew">Źródła</p>
+  <ol>
+    <li><b>Opracowanie „Zbuduj Claude Code pamięć jak mózg”</b> (październik 2026), z którego pochodzą liczby i odnośniki poniżej.</li>
+    <li><b>Claude Code Docs</b>: <a href="https://code.claude.com/docs/en/memory">memory</a>, <a href="https://code.claude.com/docs/en/hooks">hooks</a>, <a href="https://code.claude.com/docs/en/skills">skills</a>.</li>
+    <li><b>H.M. i systemy pamięci</b>: <a href="https://arxiv.org/pdf/2009.01083">Memory systems of the brain, arXiv 2009.01083</a>.</li>
+    <li><b>Pamięć sensoryczna</b>: <a href="https://faculty.college.emory.edu/sites/wyttenbach/psycog/mem/icon/index.html">Sperling, Iconic Memory (Emory)</a>.</li>
+    <li><b>Pamięć robocza</b>: <a href="https://memory.psych.missouri.edu/assets/doc/articles/2001/cowan-bbs-2001.pdf">Cowan 2001</a>; <a href="https://ai-papers.aktagon.com/papers/memgpt/">MemGPT</a>.</li>
+    <li><b>Sójki</b>: <a href="https://en.wikipedia.org/wiki/Episodic-like_memory">Episodic-like memory</a>; <a href="https://ideas.repec.org/a/nat/nature/v414y2001i6862d10.1038_35106560.html">Emery i Clayton 2001</a>.</li>
+    <li><b>Agenci i pamięć</b>: <a href="https://arxiv.org/html/2501.13956v1">Zep</a>; <a href="https://arxiv.org/pdf/2504.19413">Mem0</a>; <a href="https://arxiv.org/html/2305.16291v2">Voyager</a>; <a href="https://arxiv.org/html/2308.10144v3">ExpeL</a>; <a href="https://arxiv.org/pdf/2603.07670">Du, przegląd 2026</a>.</li>
+    <li><b>Bartlett</b>: <a href="https://en.wikipedia.org/wiki/Frederic_Bartlett">Frederic Bartlett</a>.</li>
+    <li><b>Pamięć prospektywna</b>: <a href="https://en.wikipedia.org/wiki/Prospective_memory">Prospective memory</a>.</li>
+    <li><b>Orzechówka i łosoś</b>: <a href="https://www.allaboutbirds.org/news/?p=15921">All About Birds</a>; <a href="https://www.sciencedaily.com/releases/2013/02/130207131713.htm">ScienceDaily 2013</a>.</li>
+    <li><b>Sen</b>: <a href="https://stanford.edu/%7Ejlmcc/papers/McClellandOF_JEPGRapidNeocorticalLearning.pdf">McClelland 2013</a>; <a href="https://www.frontiersin.org/articles/10.3389/fpsyg.2015.00622/full">Feld i Diekelmann 2015</a>; <a href="https://arxiv.org/pdf/2504.13171">sleep-time compute</a>.</li>
+    <li><b>Rekonsolidacja</b>: <a href="https://ideas.repec.org/a/nat/nature/v406y2000i6797d10.1038_35021052.html">Nader i in. 2000</a>; <a href="https://learnmem.cshlp.org/content/12/4/361">Loftus 2005</a>.</li>
+    <li><b>Zapominanie</b>: <a href="https://www.quantamagazine.org/to-remember-the-brain-must-actively-forget-20180724/">Quanta 2018</a>; <a href="https://www.scientificamerican.com/article/elephants-never-forget/">Scientific American o słoniach</a>.</li>
+    <li><b>Zatrucie pamięci</b>: <a href="https://arxiv.org/html/2503.03704v2">MINJA</a>.</li>
+    <li><b>Kolonia i notes Otto</b>: <a href="https://www.smithsonianmag.com/science-nature/ant-colonies-retain-memories-outlast-lifespans-individuals-180971022/">Smithsonian o mrówkach</a>; <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10354182">Menzel 2023</a>; <a href="https://protevi.com/PhilMind/ClarkChalmers.pdf">Clark i Chalmers 1998</a>.</li>
+    <li><b>Pierwsza, prozatorska wersja tego tekstu</b>: „Sójka, orzechówka i CLAUDE.md — rodzaje pamięci jako projekt pamięci wielosesyjnej” (Czytelnia Kodownika).</li>
+  </ol>
+</section>
+
+<div class="stopka">
+    <svg class="pieczec" viewBox="0 0 120 120" aria-hidden="true"><path class="lak" d="M113 60 L113.8 60.9 L114.6 61.9 L115.2 62.9 L115.7 63.9 L116 64.9 L116.1 65.9 L115.9 66.9 L115.6 67.8 L115.1 68.7 L114.4 69.6 L113.5 70.4 L112.6 71.2 L111.5 71.9 L110.5 72.6 L109.5 73.3 L108.6 73.9 L107.8 74.6 L107.2 75.3 L106.7 76.1 L106.3 76.9 L106.2 77.7 L106.1 78.6 L106.2 79.6 L106.4 80.6 L106.6 81.7 L106.8 82.8 L107 83.9 L107.1 85 L107.1 86.1 L107 87.1 L106.7 88 L106.2 88.9 L105.6 89.6 L104.8 90.2 L103.8 90.7 L102.8 91.1 L101.6 91.4 L100.5 91.6 L99.3 91.8 L98.1 92 L97 92.2 L96 92.4 L95.1 92.7 L94.3 93.1 L93.7 93.7 L93.2 94.3 L92.8 95.2 L92.5 96.1 L92.3 97.1 L92.1 98.3 L92 99.5 L91.8 100.7 L91.6 101.9 L91.3 103.1 L90.9 104.1 L90.4 105.1 L89.8 105.9 L89.1 106.6 L88.3 107.1 L87.4 107.4 L86.3 107.5 L85.3 107.5 L84.2 107.4 L83 107.3 L81.9 107 L80.8 106.8 L79.8 106.6 L78.8 106.5 L77.9 106.6 L77 106.7 L76.2 107 L75.4 107.5 L74.7 108.1 L74 108.9 L73.3 109.8 L72.6 110.7 L71.9 111.7 L71.2 112.7 L70.4 113.6 L69.6 114.4 L68.7 115.1 L67.8 115.6 L66.9 115.9 L65.9 115.9 L64.9 115.8 L63.9 115.5 L62.9 115 L61.9 114.3 L60.9 113.5 L60 112.6 L59.1 111.8 L58.2 110.9 L57.4 110.2 L56.5 109.5 L55.7 109 L54.9 108.6 L54.1 108.4 L53.2 108.4 L52.3 108.6 L51.4 108.8 L50.4 109.2 L49.4 109.7 L48.4 110.2 L47.4 110.6 L46.3 111 L45.3 111.3 L44.3 111.4 L43.3 111.4 L42.4 111.2 L41.5 110.8 L40.7 110.2 L40 109.5 L39.4 108.6 L38.8 107.6 L38.3 106.5 L37.8 105.5 L37.4 104.4 L36.9 103.4 L36.4 102.5 L35.9 101.7 L35.3 101.1 L34.6 100.6 L33.9 100.2 L33 100.1 L32 100 L30.9 100 L29.8 100.1 L28.5 100.3 L27.3 100.4 L26 100.5 L24.8 100.5 L23.7 100.4 L22.6 100.1 L21.6 99.7 L20.8 99.2 L20.1 98.5 L19.6 97.7 L19.2 96.8 L18.9 95.7 L18.8 94.6 L18.7 93.4 L18.7 92.3 L18.7 91.1 L18.6 90.1 L18.5 89 L18.4 88.1 L18.1 87.2 L17.6 86.5 L17 85.8 L16.3 85.2 L15.5 84.7 L14.5 84.2 L13.5 83.7 L12.4 83.2 L11.4 82.7 L10.3 82.1 L9.4 81.5 L8.6 80.8 L7.9 80 L7.4 79.1 L7.1 78.2 L7 77.2 L7.1 76.2 L7.4 75.1 L7.9 74 L8.4 72.9 L9.1 71.8 L9.7 70.7 L10.4 69.6 L11 68.6 L11.4 67.7 L11.8 66.8 L12 65.9 L12 65 L11.8 64.2 L11.5 63.4 L11 62.6 L10.4 61.7 L9.7 60.9 L9 60 L8.3 59.1 L7.6 58.2 L7.1 57.2 L6.6 56.3 L6.4 55.3 L6.3 54.4 L6.4 53.4 L6.7 52.5 L7.2 51.6 L7.9 50.8 L8.7 50 L9.5 49.3 L10.4 48.6 L11.3 47.9 L12.2 47.2 L12.9 46.5 L13.6 45.8 L14.1 45.1 L14.4 44.3 L14.5 43.5 L14.5 42.5 L14.4 41.6 L14.1 40.5 L13.7 39.4 L13.3 38.2 L12.9 37 L12.6 35.8 L12.3 34.6 L12.1 33.5 L12.1 32.3 L12.2 31.3 L12.6 30.4 L13.1 29.5 L13.8 28.8 L14.6 28.2 L15.6 27.7 L16.7 27.3 L17.8 27 L19 26.8 L20.1 26.5 L21.2 26.3 L22.2 26 L23.2 25.6 L24 25.2 L24.7 24.7 L25.2 24 L25.7 23.2 L26.1 22.3 L26.4 21.3 L26.7 20.3 L26.9 19.2 L27.2 18 L27.5 16.9 L27.9 15.9 L28.4 14.9 L29.1 14.1 L29.8 13.5 L30.6 13 L31.6 12.7 L32.6 12.5 L33.7 12.5 L34.9 12.7 L36.1 13 L37.3 13.4 L38.5 13.8 L39.6 14.2 L40.7 14.5 L41.7 14.8 L42.7 14.9 L43.6 14.9 L44.4 14.7 L45.2 14.4 L45.9 13.9 L46.6 13.2 L47.3 12.4 L47.9 11.5 L48.6 10.6 L49.3 9.7 L50 8.8 L50.8 7.9 L51.6 7.2 L52.5 6.7 L53.4 6.3 L54.3 6.2 L55.3 6.2 L56.3 6.4 L57.2 6.8 L58.2 7.3 L59.1 8 L60 8.6 L60.9 9.3 L61.7 10 L62.6 10.6 L63.4 11 L64.3 11.4 L65.1 11.5 L66 11.5 L66.8 11.3 L67.8 10.9 L68.7 10.5 L69.7 9.9 L70.8 9.2 L71.9 8.6 L73 8 L74.1 7.4 L75.2 7 L76.3 6.8 L77.3 6.7 L78.3 6.8 L79.2 7.1 L80.1 7.7 L80.9 8.4 L81.6 9.2 L82.2 10.2 L82.7 11.3 L83.2 12.4 L83.7 13.5 L84.2 14.6 L84.6 15.6 L85.1 16.4 L85.7 17.2 L86.4 17.8 L87.1 18.3 L87.9 18.6 L88.8 18.8 L89.8 18.9 L90.9 19 L92 19 L93.2 19 L94.3 19.1 L95.4 19.3 L96.4 19.5 L97.4 19.9 L98.2 20.5 L98.9 21.1 L99.4 22 L99.8 22.9 L100 24 L100.1 25.1 L100.1 26.3 L100 27.6 L99.9 28.8 L99.8 30 L99.7 31.1 L99.7 32.2 L99.8 33.1 L100 34 L100.4 34.8 L100.9 35.4 L101.6 36 L102.4 36.5 L103.4 36.9 L104.4 37.4 L105.5 37.8 L106.6 38.3 L107.7 38.8 L108.7 39.3 L109.7 39.9 L110.4 40.6 L111.1 41.4 L111.5 42.3 L111.7 43.2 L111.8 44.2 L111.7 45.2 L111.4 46.2 L111.1 47.3 L110.6 48.3 L110.2 49.3 L109.7 50.3 L109.3 51.3 L109.1 52.2 L108.9 53.1 L108.9 54 L109.1 54.8 L109.4 55.7 L110 56.5 L110.6 57.3 L111.3 58.2 L112.2 59.1 L113 60Z"/><circle class="lak-r" cx="60" cy="60" r="40"/><circle class="lak-r" cx="60" cy="60" r="35"/><text x="60" y="71" text-anchor="middle">SO</text></svg>
+    <p>Opowieść złożona 30.10.2026 głosem Bajarza na podstawie opracowania „Zbuduj Claude Code pamięć jak mózg” i pierwszej, prozatorskiej wersji tego tekstu. Liczby i nazwiska pochodzą z opracowania i jego źródeł; tam, gdzie źródło jest sporne albo pochodzi od dostawcy, mówię to w tekście. Część VI napisał osobny agent bez wglądu w tę opowieść; jego pomysły to propozycje, nie sprawdzone wdrożenia. Ikony narysowano ręcznie jako wektory w tekście strony.</p>
+  </div>
+
+</div>
+</main>
+</div>
+
+<script>
+(function () {
+  var r = document.documentElement;
+  try { var s = localStorage.getItem("sojka-motyw"); if (s === "light" || s === "dark") r.setAttribute("data-theme", s); } catch (e) {}
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest("[data-set-theme]") : null;
+    if (!b) return;
+    var v = b.getAttribute("data-set-theme");
+    r.setAttribute("data-theme", v);
+    try { localStorage.setItem("sojka-motyw", v); } catch (e2) {}
+  });
+  if (!("IntersectionObserver" in window)) return;
+  var linki = {};
+  Array.prototype.forEach.call(document.querySelectorAll(".szyna a[href^='#']"), function (a) { linki[a.getAttribute("href").slice(1)] = a; });
+  var cele = Object.keys(linki).map(function (id) { return document.getElementById(id); }).filter(Boolean);
+  var biezacy = null;
+  var io = new IntersectionObserver(function (wpisy) {
+    wpisy.forEach(function (w) {
+      if (!w.isIntersecting) return;
+      if (biezacy) biezacy.classList.remove("tu");
+      biezacy = linki[w.target.id];
+      if (biezacy) biezacy.classList.add("tu");
+    });
+  }, { rootMargin: "0px 0px -70% 0px" });
+  cele.forEach(function (c) { io.observe(c); });
+})();
+</script>
+</body>
+</html>
