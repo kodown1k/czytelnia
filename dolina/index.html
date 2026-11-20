@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dolina, do której wszystko się stacza</title>
+<meta name="description" content="Dlaczego model językowy poproszony o coś nieoczywistego wciąż odpowiada tym samym i dlaczego zamiast go zachęcać, lepiej zmienić kształt samego pytania.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dolina, do której wszystko się stacza">
+<meta property="og:description" content="Dlaczego model językowy poproszony o coś nieoczywistego wciąż odpowiada tym samym i dlaczego zamiast go zachęcać, lepiej zmienić kształt samego pytania.">
+<meta property="og:url" content="https://kodown1k.github.io/czytelnia/dolina/">
+<meta property="og:locale" content="pl_PL">
+<style>
+:root{
+  --bg:#f4f1ea;
+  --surface:#ebe6db;
+  --fg:#1d2128;
+  --muted:#535a66;
+  --faint:#7b818c;
+  --line:#d3cdbf;
+  --accent:#1f6f78;
+  --accent-2:#8a4b1c;
+  --bar1:#c0773a;
+  --bar2:#2f8a8f;
+  --bar3:#5b6c9c;
+  --contour:#1f6f78;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#111418;
+    --surface:#191d23;
+    --fg:#e4e2dc;
+    --muted:#a9adb5;
+    --faint:#7f848d;
+    --line:#2b3038;
+    --accent:#6cc3c6;
+    --accent-2:#e0a36b;
+    --bar1:#e0a36b;
+    --bar2:#6cc3c6;
+    --bar3:#9fb0e0;
+    --contour:#6cc3c6;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111418;--surface:#191d23;--fg:#e4e2dc;--muted:#a9adb5;--faint:#7f848d;--line:#2b3038;
+  --accent:#6cc3c6;--accent-2:#e0a36b;--bar1:#e0a36b;--bar2:#6cc3c6;--bar3:#9fb0e0;--contour:#6cc3c6;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{
+  margin:0;background:var(--bg);color:var(--fg);
+  font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  font-size:clamp(17px,.45vw + 15px,20px);line-height:1.7;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+.sans{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.col{max-width:66ch;margin:0 auto;padding:0 16px}
+.wide{max-width:960px;margin:0 auto;padding:0 16px}
+
+nav.top{max-width:960px;margin:0 auto;padding:18px 16px 0;font-size:.8rem}
+nav.top a{color:var(--muted);text-decoration:none}
+nav.top a:hover{color:var(--accent)}
+
+header.hero{position:relative;padding:clamp(28px,6vw,80px) 0 clamp(24px,4vw,48px)}
+header.hero svg.teren{display:block;width:100%;max-width:960px;height:auto;margin:0 auto 8px;padding:0 16px;color:var(--contour)}
+.kicker{text-transform:uppercase;letter-spacing:.16em;font-size:.72rem;color:var(--accent);font-weight:600;margin:0}
+h1{font-size:clamp(2.1rem,4.4vw + .6rem,3.6rem);line-height:1.08;font-weight:600;letter-spacing:-.015em;margin:.35em 0 .45em}
+.lead{font-size:1.15em;color:var(--muted);margin:0}
+
+h2{
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:clamp(1.25rem,.7vw + 1rem,1.7rem);font-weight:650;letter-spacing:-.005em;
+  margin:2.6em 0 .7em;color:var(--fg);
+}
+h2::before{content:"";display:block;width:2.2em;height:3px;background:var(--accent);border-radius:2px;margin-bottom:.7em}
+p{margin:0 0 1.1em}
+.turn{
+  font-size:1.22em;line-height:1.45;font-style:italic;color:var(--accent);
+  margin:1.6em 0;padding:0 0 0 .9em;border-left:3px solid var(--accent);
+}
+figure{margin:2.4em auto}
+figure .box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:clamp(14px,2.4vw,28px)}
+figure svg{display:block;width:100%;height:auto;color:var(--fg)}
+figure svg text{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+figcaption{font-size:.8rem;color:var(--faint);margin:.8em auto 0;max-width:66ch;padding:0 4px}
+
+section.sources{margin-top:3.4em;padding-top:.4em;border-top:1px solid var(--line)}
+section.sources h2::before{display:none}
+section.sources ul{padding-left:1.1em;margin:0}
+section.sources li{margin-bottom:.55em;font-size:.88em;overflow-wrap:anywhere;color:var(--muted)}
+a{color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1px}
+a:hover{color:var(--accent-2)}
+
+aside.dopisek{margin:3.2em 0 0;padding:1.6em clamp(16px,3vw,28px) .6em;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent-2);border-radius:10px}
+aside.dopisek .kicker{color:var(--accent-2)}
+aside.dopisek h2{margin-top:.4em}
+aside.dopisek h2::before{display:none}
+.ujawnienie{margin-top:2.6em;font-size:.85em;color:var(--faint);font-style:italic}
+footer{max-width:66ch;margin:3em auto 0;padding:1.2em 16px 4em;border-top:1px solid var(--line);font-size:.78rem;color:var(--faint);display:flex;justify-content:space-between;gap:1em;flex-wrap:wrap}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--accent)}
+</style>
+</head>
+<body>
+
+<nav class="top sans"><a href="../">← Czytelnia Kodownika</a></nav>
+
+<header class="hero">
+  <svg class="teren" viewBox="0 0 960 150" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="1.3">
+      <path d="M0 18 C 160 22, 300 30, 400 70 S 560 118, 620 74 S 820 26, 960 20" stroke-opacity=".18"/>
+      <path d="M0 34 C 170 38, 310 48, 410 84 S 560 128, 612 88 S 820 42, 960 36" stroke-opacity=".26"/>
+      <path d="M0 50 C 180 54, 320 64, 418 96 S 556 136, 604 100 S 820 58, 960 52" stroke-opacity=".34"/>
+      <path d="M0 66 C 190 70, 330 80, 426 106 S 552 140, 596 110 S 820 74, 960 68" stroke-opacity=".44"/>
+      <path d="M0 82 C 200 86, 342 94, 434 114 S 548 142, 588 118 S 820 90, 960 84" stroke-opacity=".56"/>
+    </g>
+    <path d="M300 46 C 360 52, 400 84, 450 112 S 520 132, 532 128" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 6" stroke-linecap="round" stroke-opacity=".8"/>
+    <circle cx="300" cy="46" r="5" fill="currentColor" fill-opacity=".45"/>
+    <circle cx="534" cy="128" r="6" fill="currentColor"/>
+  </svg>
+  <div class="col">
+    <p class="kicker sans">Modele językowe · różnorodność odpowiedzi</p>
+    <h1>Dolina, do której wszystko się stacza</h1>
+    <p class="lead">Dlaczego model językowy poproszony o coś nieoczywistego wciąż odpowiada tym samym i dlaczego zamiast go zachęcać, lepiej zmienić kształt samego pytania.</p>
+  </div>
+</header>
+
+<main>
+<article>
+<div class="col">
+
+<h2>Hala, w której wszyscy mówią „rzeka”</h2>
+
+<p>Wyobraź sobie, że stoisz w hali serwerowni. Jest noc. Powietrze ma równe dwadzieścia kilka stopni, wentylatory szumią jednym tonem, diody migają zielono w długich rzędach. W tych szafach pracuje dwadzieścia pięć różnych modeli językowych. Zbudowały je różne firmy, w różnych krajach, na różnych danych.</p>
+
+<p>Pochylasz się nad klawiaturą i każdemu z nich zadajesz to samo polecenie: napisz metaforę o czasie. Nie raz. Pięćdziesiąt razy każdemu. Razem tysiąc dwieście pięćdziesiąt odpowiedzi. Przestrzeń możliwych metafor jest praktycznie nieskończona. Czas może być złodziejem, kredytem, piaskiem w bucie, zimną herbatą.</p>
+
+<p>Patrzysz na wyniki. Prawie wszystko układa się w dwie grupy. W jednej czas jest rzeką. W drugiej czas jest tkaczem.</p>
+
+<p>To nie jest wymyślona scena. Tak właśnie wygląda jeden z eksperymentów opisanych w pracy „Artificial Hivemind”, czyli „sztuczny rój”, nagrodzonej na konferencji NeurIPS w 2025 roku. Zespół Liwei Jiang i Yejin Choi kazał dwudziestu pięciu modelom wygenerować po pięćdziesiąt metafor o czasie. Wyszły dwa główne skupiska, a większe z nich płynęło jak rzeka.</p>
+
+<p>W Kodowniku pracuję z agentami AI według protokołu, który uruchamia się, gdy proszę o coś „prawdziwie nieoczywistego”. Jego teza brzmi tak: domyślny tryb modelu to zapadnięcie się do najczęstszej odpowiedzi, a same zachęty w rodzaju „bądź kreatywny” tego nie łamią. Łamie to dopiero mechaniczna procedura, która zmusza model do chodzenia ścieżkami obok domyślnej. Przejdźmy się po tej tezie. Zobaczmy, co w niej zmierzono, a co jest tylko przeczuciem.</p>
+
+<h2>Zajrzyj pod maskę</h2>
+
+<p>Model językowy nie trzyma w środku gotowych zdań. Trzyma coś w rodzaju krajobrazu. Każda możliwa odpowiedź ma w nim swoje miejsce, a głębokość terenu mówi, jak bardzo ta odpowiedź jest prawdopodobna. Kiedy model pisze, wypuszcza kulkę na ten teren, słowo po słowie. Kulka toczy się w dół.</p>
+
+<p>Najgłębsze miejsce w krajobrazie statystycy nazywają modą. To po prostu wartość, która wypada najczęściej. Zjawisko, o którym mówi protokół, ma angielską nazwę <em>mode collapse</em>, czyli zapadnięcie do mody. Krajobraz, który kiedyś miał wiele dolin, zmienia się w lej. Gdziekolwiek puścisz kulkę, wyląduje w tym samym miejscu.</p>
+
+<p>Pierwsza myśl jest oczywista: potrząśnij stołem. Modele mają do tego pokrętło zwane temperaturą. Niska temperatura każe kulce trzymać się najgłębszej ścieżki. Wysoka spłaszcza teren i pozwala jej skakać na boki.</p>
+
+<p>Autorzy „sztucznego roju” sprawdzili, ile to daje. Przy zwykłych ustawieniach, temperaturze równej jeden i odcięciu najrzadszych słów, w 79 procentach przypadków średnie podobieństwo odpowiedzi jednego modelu na to samo pytanie przekraczało 0,8. Mierzono je jako podobieństwo znaczeń zdań, gdzie jeden oznacza tekst praktycznie tożsamy. Potem badacze podkręcili temperaturę do dwóch i włączyli metodę próbkowania nazywaną min-p, zaprojektowaną właśnie po to, żeby wydobyć więcej różnorodności. Odsetek prawie bliźniaczych odpowiedzi spadł do 61,2 procent.</p>
+
+</div>
+
+<figure class="wide">
+  <div class="box">
+  <svg viewBox="0 0 900 300" role="img" aria-labelledby="t1 d1">
+    <title id="t1">Odsetek pytań z prawie bliźniaczymi odpowiedziami</title>
+    <desc id="d1">Przy zwykłych ustawieniach 79 procent, po podkręceniu temperatury do dwóch i włączeniu min-p nadal 61,2 procent.</desc>
+    <text x="0" y="28" font-size="20" font-weight="700" fill="currentColor">Ile odpowiedzi to prawie bliźniaki?</text>
+    <text x="0" y="54" font-size="15" fill="currentColor" fill-opacity=".7">Odsetek przypadków, w których średnie podobieństwo odpowiedzi jednego modelu przekracza 0,8</text>
+    <line x1="300" y1="80" x2="300" y2="250" stroke="currentColor" stroke-opacity=".3"/>
+    <line x1="575" y1="80" x2="575" y2="250" stroke="currentColor" stroke-opacity=".15" stroke-dasharray="4 4"/>
+    <line x1="850" y1="80" x2="850" y2="250" stroke="currentColor" stroke-opacity=".15" stroke-dasharray="4 4"/>
+    <text x="300" y="275" font-size="13" text-anchor="middle" fill="currentColor" fill-opacity=".65">0%</text>
+    <text x="575" y="275" font-size="13" text-anchor="middle" fill="currentColor" fill-opacity=".65">50%</text>
+    <text x="850" y="275" font-size="13" text-anchor="middle" fill="currentColor" fill-opacity=".65">100%</text>
+    <text x="290" y="125" font-size="16" text-anchor="end" fill="currentColor">zwykłe ustawienia</text>
+    <text x="290" y="145" font-size="13" text-anchor="end" fill="currentColor" fill-opacity=".65">temperatura 1</text>
+    <rect x="300" y="105" width="434.5" height="46" rx="6" fill="var(--bar1)"/>
+    <text x="744" y="135" font-size="18" font-weight="700" fill="currentColor">79%</text>
+    <text x="290" y="205" font-size="16" text-anchor="end" fill="currentColor">mocne potrząśnięcie</text>
+    <text x="290" y="225" font-size="13" text-anchor="end" fill="currentColor" fill-opacity=".65">temperatura 2, min-p</text>
+    <rect x="300" y="185" width="336.6" height="46" rx="6" fill="var(--bar2)"/>
+    <text x="646" y="215" font-size="18" font-weight="700" fill="currentColor">61,2%</text>
+  </svg>
+  </div>
+  <figcaption class="sans">Dane: Jiang i współautorzy, „Artificial Hivemind”, NeurIPS 2025, pomiar na zestawie stu otwartych pytań, po pięćdziesiąt odpowiedzi na model.</figcaption>
+</figure>
+
+<div class="col">
+
+<p>Tu jest pierwsza cena. Temperatura nie przesuwa doliny, tylko rozmywa jej brzegi. Przy dwójce model częściej sięga po dziwne słowa, ale jego myśli dalej spływają tym samym korytem. Wyobraź sobie kogoś, kto mówi to samo, tylko coraz bardziej niewyraźnie. Różnorodność, którą tak zyskujesz, to w dużej mierze szum na powierzchni. Pod spodem nadal płynie rzeka.</p>
+
+<h2>Cofnij się o krok</h2>
+
+<p>Skąd wziął się ten lej? Model, który dopiero przeczytał ogromną część internetu, ma krajobraz pełen dolin, bo internet jest pełen sprzeczności, dziwactw i stylów. Takiego surowego modelu nikt jednak nie wypuszcza do ludzi. Najpierw przechodzi szkolenie końcowe. Uczy się na przykładach dobrych odpowiedzi, a potem ludzie porównują pary jego odpowiedzi i wskazują lepszą. Model jest nagradzany za to, co ludziom się podoba. Fachowo nazywa się to uczeniem ze wzmocnieniem na podstawie ludzkich ocen.</p>
+
+<p>W 2023 roku zespół Roberta Kirka z University College London i Mety porównał modele po samym szkoleniu na przykładach z modelami, które przeszły dodatkowo etap ludzkich ocen. Wynik ma kształt kompromisu. Modele po ludzkich ocenach lepiej radziły sobie z pytaniami, jakich wcześniej nie widziały, tym lepiej, im bardziej nowe były te pytania. Płaciły za to wyraźnie mniejszą różnorodnością odpowiedzi, mierzoną na kilka sposobów. Praca trafiła na konferencję ICLR w 2024 roku.</p>
+
+<p>Zysk i cena przyszły w jednej paczce. Model stał się bardziej przewidywalny w dobrym sensie i bardziej przewidywalny w złym.</p>
+
+<p>Jesienią 2025 roku zespół ze Stanfordu i Northeastern, z Jiayi Zhang, Christopherem Manningiem i Weiyan Shi, zapytał, dlaczego tak się dzieje. Szukali przyczyny nie w algorytmie, tylko w danych. Psychologia poznawcza od dawna wie, że ludzie wolą to, co znajome. Tekst, który brzmi typowo, czyta się łatwiej, a to, co łatwe, wydaje się prawdziwsze i lepsze.</p>
+
+<p>Badacze wzięli zbiór ludzkich ocen o nazwie HelpSteer i wybrali z niego 6874 pary odpowiedzi równie poprawnych merytorycznie. Potem sprawdzili, czy oceniający i tak wybierali tę odpowiedź, która dla surowego modelu była bardziej typowa. Wybierali. Autorzy nazwali to skrzywieniem ku typowości i oszacowali jego siłę jako współczynnik około 0,57 do 0,65, zależnie od modelu użytego do mierzenia typowości. Szansa, że to przypadek, była mniejsza niż jeden do stu bilionów.</p>
+
+<p class="turn">To nie model sam z siebie zrobił się nudny. Nauczyliśmy go tego, za każdym razem nagradzając znajome.</p>
+
+<p>Ten mechanizm ma jeszcze jedno, mniej oczywiste następstwo. Jeśli ludzie wolą typowe i jeśli model jest dalej nagradzany za to, co ludzie wolą, to każda nagroda pogłębia najgłębszą dolinę o kolejny milimetr. Lej nie jest wypadkiem przy pracy. Jest prostą konsekwencją uczciwie wykonanego zadania: daj ludziom to, co im się podoba.</p>
+
+<h2>Spróbuj go namówić</h2>
+
+<p>Teraz widać, dlaczego „bądź kreatywny” działa słabo. Prośba o kreatywność to też tekst i on też ma swoją najczęstszą odpowiedź. Model słyszy „wymyśl coś zaskakującego” i sięga po to, co w jego danych najczęściej było zaskakujące. Po zaskoczenie typowe. Po ośmiornicę, która prowadzi kawiarnię. Po czas, który jest rzeką, tylko płynie pod górę.</p>
+
+<p>Zespół Zhang zaproponował ruch innego rodzaju. Nie zachęcać, tylko przebudować pytanie. Zamiast „opowiedz dowcip o kawie” piszesz „wygeneruj pięć dowcipów o kawie i przy każdym podaj jego prawdopodobieństwo”. Metodę nazwali <em>verbalized sampling</em>, co da się przełożyć jako próbkowanie wypowiedziane na głos. Model nie losuje po cichu jednej odpowiedzi. Opisuje słowami fragment swojego krajobrazu.</p>
+
+<p>Sekret jest prosty i trochę przewrotny. Pytanie o jedną odpowiedź ma jedną najczęstszą odpowiedź. Pytanie o rozkład ma za najczęstszą odpowiedź rozkład.</p>
+
+<p class="turn">Najbardziej typowa reakcja na prośbę o pięć różnych dowcipów to pięć różnych dowcipów.</p>
+
+<p>Lej nadal działa, tylko na wyższym piętrze. Kulka wciąż stacza się na dno, ale na dnie leży teraz cały wachlarz.</p>
+
+<p>Ile to daje? Według autorów w zadaniach twórczych, takich jak wiersze, opowiadania i dowcipy, różnorodność wzrosła od 1,6 do 2,1 raza w porównaniu ze zwykłym pytaniem. Metoda odzyskała około dwóch trzecich różnorodności, jaką miał model przed szkoleniem końcowym, dokładnie 66,8 procent. Autorzy piszą też, że poprawność faktów i bezpieczeństwo na tym nie ucierpiały, a temperaturę można dokładać jako osobne, niezależne pokrętło.</p>
+
+<p>Jest tu szczegół, który przeczy intuicji. Można by sądzić, że potężniejsze modele są bardziej zastygłe, bo przeszły dłuższe szkolenie. Tymczasem większe modele zyskiwały na tej metodzie od półtora do dwóch razy więcej niż ich mniejsze wersje. Autorzy podają przykłady GPT-4.1 wobec GPT-4.1-Mini i Gemini 2.5 Pro wobec Gemini 2.5 Flash. Wyjaśnienie nasuwa się samo: różnorodność nie zniknęła z modelu, tylko leży przykryta. Im większy model, tym więcej leży pod spodem i tym więcej da się wydobyć, jeśli tylko zapyta się we właściwy sposób.</p>
+
+<h2>Policz pomysły</h2>
+
+<p>Rok wcześniej, w styczniu 2024 roku, trzech badaczy z Wharton School, Lennart Meincke, Ethan Mollick i Christian Terwiesch, zrobiło eksperyment, który dobrze pasuje do tego protokołu. Zadanie było przyziemne: wymyśl nowy produkt dla studentów, który da się sprzedać za najwyżej pięćdziesiąt dolarów.</p>
+
+<p>Przetestowali trzydzieści pięć sposobów pytania modelu GPT-4. Każdy sposób dawał tysiąc pomysłów, w dziesięciu sesjach. Do porównania mieli pomysły grupy około stu studentów studiów menedżerskich. Różnorodność mierzyli jako średnie podobieństwo pomysłów do siebie nawzajem. Im niższa liczba, tym pomysły bardziej się od siebie różnią.</p>
+
+</div>
+
+<figure class="wide">
+  <div class="box">
+  <svg viewBox="0 0 900 340" role="img" aria-labelledby="t2 d2">
+    <title id="t2">Średnie podobieństwo pomysłów w puli</title>
+    <desc id="d2">Zwykłe pytanie do GPT-4 dało 0,377, pytanie rozpisane na kroki 0,255, a grupa studentów 0,243.</desc>
+    <text x="0" y="28" font-size="20" font-weight="700" fill="currentColor">Jak bardzo pomysły są do siebie podobne?</text>
+    <text x="0" y="54" font-size="15" fill="currentColor" fill-opacity=".7">Średnie podobieństwo w puli pomysłów. Krótszy pasek oznacza większą różnorodność.</text>
+    <line x1="300" y1="80" x2="300" y2="290" stroke="currentColor" stroke-opacity=".3"/>
+    <line x1="575" y1="80" x2="575" y2="290" stroke="currentColor" stroke-opacity=".15" stroke-dasharray="4 4"/>
+    <line x1="850" y1="80" x2="850" y2="290" stroke="currentColor" stroke-opacity=".15" stroke-dasharray="4 4"/>
+    <text x="300" y="315" font-size="13" text-anchor="middle" fill="currentColor" fill-opacity=".65">0</text>
+    <text x="575" y="315" font-size="13" text-anchor="middle" fill="currentColor" fill-opacity=".65">0,2</text>
+    <text x="850" y="315" font-size="13" text-anchor="middle" fill="currentColor" fill-opacity=".65">0,4</text>
+    <text x="290" y="120" font-size="16" text-anchor="end" fill="currentColor">GPT-4, zwykłe pytanie</text>
+    <rect x="300" y="98" width="518.4" height="40" rx="6" fill="var(--bar1)"/>
+    <text x="826" y="125" font-size="18" font-weight="700" fill="currentColor">0,377</text>
+    <text x="290" y="190" font-size="16" text-anchor="end" fill="currentColor">GPT-4, pytanie na kroki</text>
+    <rect x="300" y="168" width="350.6" height="40" rx="6" fill="var(--bar2)"/>
+    <text x="658" y="195" font-size="18" font-weight="700" fill="currentColor">0,255</text>
+    <text x="290" y="260" font-size="16" text-anchor="end" fill="currentColor">grupa studentów</text>
+    <rect x="300" y="238" width="334.1" height="40" rx="6" fill="var(--bar3)"/>
+    <text x="642" y="265" font-size="18" font-weight="700" fill="currentColor">0,243</text>
+  </svg>
+  </div>
+  <figcaption class="sans">Dane: Meincke, Mollick i Terwiesch, „Prompting Diverse Ideas: Increasing AI Idea Variance”, 2024. Podobieństwo kosinusowe opisów pomysłów; wartości jak podaje streszczenie pracy.</figcaption>
+</figure>
+
+<div class="col">
+
+<p>Zwykłe pytanie dało podobieństwo 0,377. Studenci 0,243. Między nimi jest przepaść, którą widać gołym okiem. Zwycięzcą okazało się pytanie, w którym model musi rozpisać zadanie na kolejne kroki i przejść je po kolei, zamiast od razu wyrzucić listę. Fachowo mówi się na to łańcuch myśli. Wynik: 0,255. Prawie poziom ludzi.</p>
+
+<p>Druga liczba jest jeszcze ciekawsza. Autorzy szacowali, ile w ogóle unikalnych pomysłów kryje się w danej metodzie, zanim zacznie się powtarzać. Przy zwykłym pytaniu wyszło około trzech tysięcy siedmiuset. Przy pytaniu na kroki około czterech tysięcy siedmiuset. Tysiąc pomysłów więcej tylko dlatego, że inaczej ułożono polecenie. Ethan Mollick pisał potem na swoim blogu, że ta przewaga utrzymywała się nawet przy generowaniu siedmiuset pięćdziesięciu pomysłów, a więc nie wyczerpywała się po pierwszej garści.</p>
+
+<p>Zauważ, co łączy oba wyniki. Ani w Wharton, ani na Stanfordzie nikt nie wygrał lepszą zachętą. Wygrała zmiana struktury. Rozpisanie na kroki to rusztowanie, które każe kulce zatrzymać się kilka razy po drodze i z każdego przystanku spojrzeć gdzie indziej. Prośba o rozkład to rusztowanie, które każe jej opisać cały teren, zamiast z niego zjechać. Mój protokół mówi dokładnie to samo: mechanika zamiast zachęty. Tu badania stoją po jego stronie.</p>
+
+<h2>Wyjdź z sali</h2>
+
+<p>Do tej pory patrzyliśmy na jeden model. Teraz wróć do hali z dwudziestoma pięcioma szafami. Intuicja podpowiada, że skoro jeden model się zapada, wystarczy zapytać kilka różnych. Różne firmy, różne dane, różne doliny.</p>
+
+<p>Autorzy „sztucznego roju” sprawdzili i to. Średnie podobieństwo odpowiedzi pochodzących z różnych modeli wynosiło od 71 do 82 procent, a niektóre pary modeli dochodziły do 0,81 i 0,82. Modele różnych producentów zachowują się w otwartych zadaniach jak bliskie rodzeństwo. Ich krajobrazy są wyrzeźbione podobnymi narzędziami, z podobnych tekstów, według podobnych ludzkich gustów. Nic dziwnego, że ich doliny leżą w tych samych miejscach.</p>
+
+<p class="turn">Zapytanie pięciu modeli to nie pięć opinii. To pięć odbić tej samej doliny.</p>
+
+<p>W tej samej pracy jest jeszcze jedna obserwacja. Badacze zebrali po dwadzieścia pięć niezależnych ocen ludzkich dla każdej pary pytanie i odpowiedź. Ludzie często naprawdę się nie zgadzali. Przy odpowiedziach podobnej jakości jedni woleli jedną, drudzy drugą. Modele, które oceniają odpowiedzi, i modele nagradzające gorzej radziły sobie właśnie z takimi przypadkami. Innymi słowy, prawdziwy ludzki gust jest szerszy niż jego uśredniony obraz, na którym trenuje się maszyny.</p>
+
+<p>Ta cena nie zostaje w serwerowni. W lipcu 2024 roku Anil Doshi i Oliver Hauser opublikowali w czasopiśmie Science Advances eksperyment z pisaniem krótkich opowiadań. Autorzy, którzy mogli podejrzeć pomysły podsuwane przez generatywną sztuczną inteligencję, pisali teksty oceniane jako bardziej twórcze, lepiej napisane i przyjemniejsze w lekturze. Najbardziej zyskiwali ci, którzy sami z siebie byli mniej twórczy. Tyle że opowiadania pisane z pomocą maszyny były do siebie bardziej podobne niż opowiadania pisane przez ludzi w pojedynkę.</p>
+
+<p>Autorzy nazwali to dylematem społecznym. Każdy z osobna wychodzi na tym lepiej. Wszyscy razem produkują węższy wachlarz nowości. To ten sam kompromis, który widzieliśmy u Kirka, tylko przeniesiony z wnętrza modelu na całą bibliotekę ludzkich tekstów.</p>
+
+<h2>Zejdź na ziemię</h2>
+
+<p>Czas oddzielić to, co zmierzono, od tego, co obiecano. Mój protokół ma listę słów, które go uruchamiają: wymyśl, burza mózgów, kreatywnie, nieoczywiste, czego świat nie widział. Obiecuje, że mechaniczna procedura da coś prawdziwie nieoczywistego. Co z tego da się potwierdzić?</p>
+
+<p>Potwierdzone jest samo zjawisko. Zapadanie się do najczęstszej odpowiedzi zmierzono w wielu pracach, na dziesiątkach modeli, a jedna z nich, „sztuczny rój”, przetestowała ich ponad siedemdziesiąt. Potwierdzone jest też, że samo podkręcanie temperatury i pytanie wielu modeli nie gwarantuje różnorodności. Potwierdzone jest wreszcie, że zmiana struktury pytania potrafi tę różnorodność wyraźnie podnieść, i to w dwóch niezależnych zespołach, różnymi metodami.</p>
+
+<p>Słabiej stoi teza, że zachęty w ogóle nie działają. Badania pokazują raczej, że zmiana struktury działa silniej niż zwykłe, rozsądnie brzmiące prośby. W Wharton wiele sensownych sformułowań dawało pule mniej różnorodne niż ludzie. To mocny argument, ale nie dowód, że każda zachęta jest bezużyteczna.</p>
+
+<p>Teraz to, czego nikt nie zmierzył. Wszystkie te badania mierzą różnorodność, nie nieoczywistość. Podobieństwo znaczeń zdań mówi, jak daleko od siebie leżą odpowiedzi. Nie mówi, czy któraś z nich jest odkrywcza, użyteczna ani prawdziwa. Sto pomysłów rozrzuconych szeroko po mapie może zawierać sto przeciętnych pomysłów. Różnorodność puli to warunek, żeby znaleźć coś nowego, ale nie gwarancja, że to coś w niej leży.</p>
+
+<p>Druga sprawa: liczby, które model wypisuje przy odpowiedziach w metodzie próbkowania na głos, to jego deklaracja, a nie odczyt z wnętrza. Autorzy pokazują, że w jednym z testów tak opisany rozkład zbliżał się do rozkładu, jaki daje przybliżenie danych treningowych. To obiecujące, ale jeden test to nie reguła. Kiedy model mówi, że jakiś pomysł ma dziesięć procent szans, warto to czytać jak szacunek przyjaciela, a nie jak wskazanie wagi.</p>
+
+<p>Trzecia sprawa to cena, którą płaci się zawsze. Odpowiedź z ogona rozkładu jest rzadka, bo zwykle jest gorsza. Dolina jest głęboka nie bez powodu: tam leżą odpowiedzi poprawne, zrozumiałe i bezpieczne. Wyciągając model z doliny, kupujesz szerokość za cenę średniej jakości i za więcej tekstu do przeczytania. Ktoś musi potem przesiać pięć, dwadzieścia czy tysiąc pomysłów. Mechaniczny protokół przenosi wysiłek z maszyny na człowieka, który wybiera.</p>
+
+<p>I ostatnia sprawa. Żadne z cytowanych badań nie testowało mojego protokołu, z jego listą słów wyzwalających i jego krokami. Jego założenia zgadzają się z kierunkiem badań, ale jego skuteczność jako całości nie została zmierzona. Uczciwie trzeba powiedzieć, że to hipoteza, dobrze ugruntowana, ale wciąż hipoteza.</p>
+
+<h2>Z powrotem w hali</h2>
+
+<p>Wracasz do serwerowni. Ta sama noc, ten sam szum wentylatorów, te same zielone diody. Te same dwadzieścia pięć szaf.</p>
+
+<p>Tym razem wiesz, na co patrzysz. Rzeka nie jest ubóstwem wyobraźni maszyny. Jest śladem milionów ludzkich wyborów, w których to, co znajome, wygrywało z tym, co dziwne, o kilka procent, raz za razem. Tkacz to druga, płytsza dolina, wyżłobiona tym samym dłutem. Każdy z tych modeli ma pod spodem tysiące innych metafor. Leżą przykryte warstwą nagród za typowość.</p>
+
+<p>Więc nie prosisz już, żeby model był kreatywny. Prosisz go o pięć metafor o czasie i o to, żeby przy każdej napisał, jak często by ją wybrał. Rzeka wciąż się pojawia, bo jest prawdziwą częścią krajobrazu. Ale teraz stoi w szeregu, z uczciwie podpisanym udziałem, a obok niej leżą rzeczy, których wcześniej nie widziałeś. Część z nich jest słaba. Jedna może być dobra. Wybór i tak należy do ciebie.</p>
+
+<p>Rzeka nigdy nie była jedyną odpowiedzią. Była jedynie tą, do której najłatwiej było spłynąć.</p>
+
+<aside class="dopisek">
+<p class="kicker sans">Dopisek · 20 listopada 2026</p>
+<h2>Szczyt, na który nikt nie wszedł</h2>
+
+<p>Ten tekst był już gotowy, kiedy przyszła wiadomość. Wyobraź sobie zwykłą stronę domową matematyka i jedną kartkę PDF, bez wykresów i bez fanfar. Podpisuje ją Levent Alpöge, matematyk pracujący w Anthropic. W drugim akapicie stoi zdanie: „Wierzę, że pracując z Claude, odkryłem dowód hipotezy Riemanna”.</p>
+
+<p>Ta hipoteza ma sto sześćdziesiąt siedem lat. Bernhard Riemann zapisał ją w 1859 roku. Mówi, że wszystkie ukryte zera pewnej funkcji, tej, która pilnuje, jak gęsto rozsiane są liczby pierwsze, leżą na jednej prostej. Jeśli to prawda, liczby pierwsze są rozrzucone tak równo, jak to tylko możliwe. Pokolenia najlepszych matematyków próbowały i schodziły z niczym. To nie jest dolina. To szczyt, na który od półtora wieku nikt nie wszedł. Alpöge pisze, że jego metoda sięga jeszcze dalej, do uogólnionej wersji hipotezy.</p>
+
+<p>Popatrz, jak opisuje drogę, bo to nasza opowieść w innym przebraniu. Kierunek wybrał on: dwa zupełnie różne pomysły podpatrzone w prostszym, zabawkowym przypadku i miejsce, w którym miały się spotkać. Potem, jak pisze, Claude przy mecie „poleciał, tańczył i iskrzył”, zostawiając go daleko w tyle. Jako przykład podaje jeden krok, długość pewnego łańcucha konstrukcji, którą zaproponował model: pierwiastek z długości badanej sumy. I dopisuje: „A zresztą, czym innym mogłoby to być?”. Tak brzmi dobry pomysł spoza doliny. Zanim padnie, nikt go nie widzi. Kiedy już padnie, wydaje się oczywisty.</p>
+
+<p>A teraz zejdź na ziemię, tak jak wcześniej w tym tekście. Ogłoszenie nie jest jeszcze dowodem przyjętym przez świat. Argument nie przeszedł recenzji, a Alpöge sam przyznaje, że na razie jest niesłychanie długi. Zamiast artykułu jest formalizacja w Lean, programie, który mechanicznie sprawdza każdy krok rozumowania, spakowana w czternaście części. To mocny dowód intencji, bo komputera nie uwiedzie piękna proza. Ktoś niezależny musi jednak sprawdzić, czy to, co komputer potwierdził, jest naprawdę hipotezą Riemanna, a nie bardzo podobnym zdaniem obok. W chwili pisania nikt tego jeszcze nie zrobił. W sierpniu Anthropic opisał skromniejszy wynik Claude’a: odsetek zer, o których wiadomo, że leżą na prostej, wzrósł według firmy z 41,6 do 67,2 procent. Firma pisała wtedy wprost, że nie spodziewa się, by tamte metody doprowadziły do pełnego dowodu. Ten dopisek mówi więc tylko tyle, że ktoś ogłosił dowód. Czy ten dowód istnieje, jeszcze nie wiadomo.</p>
+
+<p>Jeśli się obroni, ta historia dostanie puentę, której nikt się nie spodziewał. Najtrudniejszego od półtora wieku pomysłu w matematyce nie znalazł ani model zostawiony sam sobie, ani człowiek w pojedynkę. Znalazł go człowiek, który wskazał kierunek, razem z maszyną, która poszła dalej, niż on sam by zaszedł. A jeśli się nie obroni, zostanie lekcja z tej samej hali: od najśmielszej odpowiedzi do prawdziwej wciąż prowadzi jedna droga, przez ludzi, którzy ją sprawdzą.</p>
+</aside>
+
+<p class="ujawnienie">Tekst powstał z pomocą AI (Claude). Liczby i wnioski pochodzą z prac wymienionych niżej.</p>
+
+</div>
+</article>
+
+<div class="col">
+<section class="sources">
+<h2>Źródła</h2>
+<ul>
+  <li><a href="https://arxiv.org/abs/2510.01171">Jiayi Zhang i współautorzy, „Verbalized Sampling: How to Mitigate Mode Collapse and Unlock LLM Diversity”, arXiv, 2025</a></li>
+  <li><a href="https://arxiv.org/abs/2510.22954">Liwei Jiang i współautorzy, „Artificial Hivemind: The Open-Ended Homogeneity of Language Models (and Beyond)”, arXiv, 2025</a></li>
+  <li><a href="https://neurips.cc/virtual/2025/loc/san-diego/oral/121422">NeurIPS 2025, prezentacja ustna pracy „Artificial Hivemind”</a></li>
+  <li><a href="https://arxiv.org/abs/2402.01727">Lennart Meincke, Ethan Mollick, Christian Terwiesch, „Prompting Diverse Ideas: Increasing AI Idea Variance”, arXiv, 2024</a></li>
+  <li><a href="https://www.emergentmind.com/papers/2402.01727">Emergent Mind, streszczenie pracy „Prompting Diverse Ideas” z liczbami</a></li>
+  <li><a href="https://www.oneusefulthing.org/p/captains-log-the-irreducible-weirdness">Ethan Mollick, „Captain's log: the irreducible weirdness of prompting AIs”, One Useful Thing</a></li>
+  <li><a href="https://arxiv.org/abs/2310.06452">Robert Kirk i współautorzy, „Understanding the Effects of RLHF on LLM Generalisation and Diversity”, ICLR 2024</a></li>
+  <li><a href="https://alpo.ge/remark.pdf">Levent Alpöge, oświadczenie o dowodzie hipotezy Riemanna, 20 listopada 2026 (formalizacja w Lean w 14 częściach, podlinkowana w przypisie)</a></li>
+  <li><a href="https://www.anthropic.com/news/riemann-zeta">Anthropic, wynik Claude’a dotyczący zer funkcji dzeta, 10 sierpnia 2026</a></li>
+  <li><a href="https://www.science.org/doi/10.1126/sciadv.adn5290">Anil R. Doshi, Oliver P. Hauser, „Generative AI enhances individual creativity but reduces the collective diversity of novel content”, Science Advances, 2024</a></li>
+</ul>
+</section>
+</div>
+</main>
+
+<footer class="sans">
+  <a href="../">Czytelnia Kodownika</a>
+  <a href="https://kodownik.co">kodownik.co</a>
+</footer>
+
+</body>
+</html>
